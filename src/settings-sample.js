@@ -18,7 +18,19 @@ var settings = function() {
 	this.account['cookieset'] = '';
 		
 	this.account['smtpemail'] = '';  // smtp email account
-	this.account['smtppassword'] = '';	
+	this.account['smtppassword'] = '';
+
+	this.social = {};
+	this.social['twitterid'] = ;
+	this.social['twittersecret'] = ;
+	this.social['facebookid'] = ;
+	this.social['facebooksecret'] = ;
+		
+		
+	this.resthistory = {};
+	this.sensorid = {};
+	
+		
 };
 
 

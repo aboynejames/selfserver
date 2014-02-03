@@ -17,9 +17,12 @@ var util = require('util');
 
 var handle = {};
 handle["/"] = requestHandlers.start;
-handle["/signinmepath"] = requestHandlers.signincheckmepath;
+//handle["/signinmepath"] = requestHandlers.signincheckmepath;
 handle["/auth"] = requestHandlers.authomevent;
 handle["/logout"] = requestHandlers.logout;
+handle["/swimmers"] = requestHandlers.swimmers;
+handle["/swimdata"] = requestHandlers.swimdata;
+	
 
 //console.log(util.inspect(router));	
 
