@@ -13,8 +13,7 @@ var querystring = require("querystring");
 var fs = require("fs");
 var util = require('util');
 var http = require('http');
-var sio = require('socket.io');
-var settings = require("./settings");
+
 
 
 /**
@@ -48,7 +47,7 @@ function authomevent (fullpath, response, request, couchin, couchlive, authom) {
 //console.log(fullpath);	
 	if (fullpath[1] == "auth")
 	{
-		console.log('authom twitter etc');
+console.log('authom twitter etc');
 		authom.listen(request, response);
 	}
 
@@ -195,8 +194,8 @@ console.log(fullpath);
 
 
 		}
-// peform couchdb query to get swimmers + current data(need decide how set limit)
-couchlive.buildswimmers(fullpath, response, request, couchin, origin);
+	// peform couchdb query to get swimmers + current data(need decide how set limit)
+	couchlive.buildswimmers(fullpath, response, request, couchin, origin);
 /*
 		swimmersin = {"andy":"1234"};
 		swimmersback = JSON.stringify(swimmersin);
@@ -212,10 +211,8 @@ couchlive.buildswimmers(fullpath, response, request, couchin, origin);
 * @method swimdata
 *
 */
-function swimdata(fullpath, response, request, couchin, couchlive) {
-console.log("Request handler for swimdata called");
-console.log(fullpath);
-//console.log(couchin.resthistory);
+function swimdata(fullpath, response, request, couchin, couchlive, authom) {
+console.log("Request handler for swimdata called FIRST");	
 	// first need to check authorisation token for this individual
 	var checkpassin = '';
 	//fullpath[3] = 123412324;
@@ -223,7 +220,6 @@ console.log(fullpath);
 	{
 		checkpassin = 1;
 	}
-	
 	
 	if(checkpassin == 1)
 	{
@@ -263,8 +259,8 @@ console.log(fullpath);
 
 
 		}
-// peform couchdb query to get swimmers + current data(need decide how set limit)
-couchlive.buildswimdata(fullpath, response, request, couchin, origin);
+		// peform couchdb query to get swimmers + current data(need decide how set limit)
+		couchlive.buildswimdata(fullpath, response, request, couchin, couchlive, origin);
 /*
 		swimmersin = {"andy":"1234"};
 		swimmersback = JSON.stringify(swimmersin);
@@ -275,9 +271,72 @@ couchlive.buildswimdata(fullpath, response, request, couchin, origin);
 	}
 }
 
+/**
+*  provide list training data for individual swimer
+* @method swimdata
+*
+*/
+function racedata(fullpath, response, request, couchin, couchlive, authom) {
+//console.log("Request handler for RACEdata called");
+//console.log(fullpath);
+//console.log(couchin.resthistory);
+	// first need to check authorisation token for this individual
+	var checkpassin = '';
+	//fullpath[3] = 123412324;
+	if( fullpath[4] === couchin.resthistory[fullpath[2]])
+	{
+		checkpassin = 1;
+	}
+	
+	if(checkpassin == 1)
+	{
+		// When dealing with CORS (Cross-Origin Resource Sharing)
+		// requests, the client should pass-through its origin (the
+		// requesting domain). We should either echo that or use *
+		// if the origin was not passed.
+		var origin = (request.headers.origin || "*");
+//console.log(request.headers.origin);
+//console.log("mepath appcache mssesup");
+
+		// Check to see if this is a security check by the browser to
+		// test the availability of the API for the client. If the
+		// method is OPTIONS, the browser is check to see to see what
+		// HTTP methods (and properties) have been granted to the
+		// client.
+		if (request.method.toUpperCase() === "OPTIONS"){
+
+
+			// Echo back the Origin (calling domain) so that the
+			// client is granted access to make subsequent requests
+			// to the API.
+			response.writeHead(
+				"204",
+				"No Content",
+				{
+					"access-control-allow-origin": origin,
+					"access-control-allow-methods": "GET, POST, PUT, DELETE, OPTIONS",
+					"access-control-allow-headers": "content-type, accept",
+					"access-control-max-age": 10, // Seconds.
+					"content-length": 0
+				}
+			);
+
+			// End the response - we're not sending back any content.
+			return( response.end() );
+
+
+		}
+		// peform couchdb query to get swimmers + current data(need decide how set limit)
+		couchlive.buildracedata(fullpath, response, request, couchin, couchlive, origin);
+	
+	}
+	
+};
+
 
 exports.start = start;
 exports.authomevent = authomevent;
 exports.logout = logout;
 exports.swimmers = swimmers;
 exports.swimdata = swimdata;
+exports.racedata = racedata;

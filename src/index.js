@@ -22,7 +22,7 @@ handle["/auth"] = requestHandlers.authomevent;
 handle["/logout"] = requestHandlers.logout;
 handle["/swimmers"] = requestHandlers.swimmers;
 handle["/swimdata"] = requestHandlers.swimdata;
-	
+handle["/racedata"] = requestHandlers.racedata;	
 
 //console.log(util.inspect(router));	
 

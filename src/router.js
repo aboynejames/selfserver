@@ -17,14 +17,14 @@ var util = require('util');
 * @method route
 */
 function route(handle, pathname, response, request, couchin, couchlive, authom) {
-  console.log("About to route a request for " + pathname);
+console.log("About to route a request for " + pathname);
 
 //console.log(util.inspect(pathname));
 //console.log('at router leevvveel' + util.inspect(couchin));
 	var firstpath=pathname.split("/"); 
-console.log(firstpath);
+//console.log(firstpath);
 	var pathlive = '/'+firstpath[1];
-console.log(pathlive);
+//console.log(pathlive);
   if (typeof handle[pathlive] === 'function') {
     handle[pathlive](firstpath, response, request, couchin, couchlive, authom);
   }

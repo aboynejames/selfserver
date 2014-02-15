@@ -21,6 +21,8 @@ var serialport = require("serialport");	// include the serialport library
 var SerialPort = serialport.SerialPort;	// make a local instance of serial
 //var dgram = require('dgram');
 //var buf= require('buffer');
+var identititySelf = require("./identitysensortag");
+
 
 /**
 * controls start of node.js server
@@ -31,8 +33,10 @@ function start(route, handle) {
 
 	var couchin = {};
 	var couchlive = {};
+
 	couchin = new settings();
 	couchlive = new couchDB(couchin);
+	idsetup = new identititySelf();
 	//couchin.resthistory["aboynejames"] = 123412324;		
 		
 	var app = http.createServer(onRequest).listen(8881);
@@ -41,7 +45,7 @@ function start(route, handle) {
 	
 		var pathname = url.parse(request.url).pathname;
   
-console.log("Request for " + pathname + " received.");
+//console.log("Request for " + pathname + " received.");
 		route(handle, pathname, response, request, couchin, couchlive, authom);
   }
 	
@@ -68,7 +72,12 @@ console.log("Request for " + pathname + " received.");
 		{
 			var idname = datain.data['screen_name'];
 			var idtoken = datain['token'];
-			var sensorid = ["734081--2124474577","5613079--2124474577"];
+
+			couchlive.aggregateID(idname);	
+			// keep trake of user id & token & expiry time (not added yet)
+			//restlog[idname] = idtoken;
+			couchin.resthistory[idname] = idtoken;
+			
 		}
 		else if (datain.service == "facebook")
 		{
@@ -76,12 +85,7 @@ console.log("Request for " + pathname + " received.");
 			var idtoken = datain.data['']
 		}
 		
-		// keep trake of user id & token & expiry time (not added yet)
-		//restlog[idname] = idtoken;
-		couchin.resthistory[idname] = idtoken;
-		
-		// match the authorisation ID with the sendorInput IDs held
-		couchin.sensorid[idname] = sensorid;
+
 
 		// after the session middleware has executed, let's finish processing the request
 		//res.writeHead(200, {'Content-Type': 'text/plain'});
@@ -116,8 +120,31 @@ console.log("Request for " + pathname + " received.");
 
 
 	io.sockets.on('connection', function (socket, server) {
+
+		socket.on('swimmerclientstart', function(stdata){
+			socket.emit('startnews', 'localpi');
+			setTimeout(function() {idsetup.checkIDs()},5000);
+
+			idsetup.on("IDdata", function(datainstant) {
+console.log('Received starting ids: "' + datainstant + '"');
+				socket.emit('startSwimmers', datainstant);
+			})
+
+		});
 		
-	
+		socket.on('checkSplitID', function(stdata){
+console.log('identity split event socket');			
+			idsetup.checkSplitIDs();
+
+		});
+		
+		// identity sensor listener
+		idsetup.on("dataIDsplit", function(datainstant) {
+console.log('Received instant data: "' + datainstant + '"');
+			
+		})
+		
+		
 		// serial usb port listener
 		myPort.on('data', function (data) {
 			// set the value property of scores to the serial string:
@@ -125,8 +152,16 @@ console.log("Request for " + pathname + " received.");
 			// for debugging, you should see this in Terminal:
 //console.log(data);
 			// send a serial event to the web client with the data:
-			socket.emit('stopwachEvent', serialData);
+			socket.emit('stopdwatchEvent', serialData);
 		});  
+		
+		socket.on('contextMixer', function(datacontext){
+//console.log(util.inspect(data));
+//console.log('context mixer in');								
+//console.log(datacontext);
+			socket.broadcast.emit('contextEventdisplay', datacontext);	
+		});
+
 		
 	});
 		
