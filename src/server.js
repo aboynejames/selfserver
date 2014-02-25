@@ -22,7 +22,9 @@ var SerialPort = serialport.SerialPort;	// make a local instance of serial
 //var dgram = require('dgram');
 //var buf= require('buffer');
 var identititySelf = require("./identitysensortag");
-
+var async = require('async');
+var SensorTag = require('./sensortagindex');
+var MasterStopwatch = require("./masterwatch");
 
 /**
 * controls start of node.js server
@@ -36,8 +38,73 @@ function start(route, handle) {
 
 	couchin = new settings();
 	couchlive = new couchDB(couchin);
-	idsetup = new identititySelf();
-	//couchin.resthistory["aboynejames"] = 123412324;		
+	idsetup = new identititySelf();		
+	stopwatchlive = new MasterStopwatch(idsetup);
+//console.log(stopwatchlive);
+
+	SensorTag.discover(function(sensorTag) {
+	//console.log('main app discover');	
+	//console.log(sensorTag._peripheral.uuid); 
+	//console.log(sensorTag._peripheral._noble._peripherals[sensorTag._peripheral.uuid].rssi);
+	  
+		sensorTag.on('disconnect', function()  {
+	//console.log('disconnected!');
+		process.exit(0);
+		});
+	  
+	  
+		async.series([
+		function(callback) {
+console.log('connect');
+			sensorTag.connect(callback);
+		},
+		function(callback) {
+console.log('discoverServicesAndCharacteristics');
+			sensorTag.discoverServicesAndCharacteristics(callback);
+		},
+		function(callback) {
+console.log('readDeviceName');
+			sensorTag.readDeviceName(function(deviceName) {
+console.log('\tdevice name = ' + deviceName);
+				callback();
+			});
+		},
+		function(callback) {
+console.log('readSystemId');
+			sensorTag.readSystemId(function(systemId) {
+console.log('\tsystem id = ' + systemId);
+				callback();
+			});
+		},
+		function(callback) {
+console.log('readSimpleRead');
+			sensorTag.on('simpleKeyChange', function(left, right, pressedby) {
+
+	//console.log('left: ' + left);
+	//console.log('right: ' + right);
+				if(left || right)
+				{
+console.log('pressed by');			
+console.log(pressedby);				
+					stopwatchlive.startbutton(pressedby);
+				}
+
+				if (left && right) {
+					sensorTag.notifySimpleKey(callback);
+
+				}
+			});
+
+			sensorTag.notifySimpleKey(function() {
+
+			});
+		}
+	    ]);
+
+	});
+
+
+
 		
 	var app = http.createServer(onRequest).listen(8881);
 		
@@ -47,9 +114,9 @@ function start(route, handle) {
   
 //console.log("Request for " + pathname + " received.");
 		route(handle, pathname, response, request, couchin, couchlive, authom);
-  }
+	}
 	
-			// data for live two way socket data flow for real time display everywhere
+	// data for live two way socket data flow for real time display everywhere
 	var io = sio.listen(app);	
 
 	
@@ -123,12 +190,12 @@ function start(route, handle) {
 
 		socket.on('swimmerclientstart', function(stdata){
 			socket.emit('startnews', 'localpi');
-			setTimeout(function() {idsetup.checkIDs()},5000);
+			setTimeout(function() {idsetup.checkIDs()},4000);
 
 			idsetup.on("IDdata", function(datainstant) {
 console.log('Received starting ids: "' + datainstant + '"');
 				socket.emit('startSwimmers', datainstant);
-			})
+			});
 
 		});
 		
@@ -138,11 +205,23 @@ console.log('identity split event socket');
 
 		});
 		
-		// identity sensor listener
-		idsetup.on("dataIDsplit", function(datainstant) {
-console.log('Received instant data: "' + datainstant + '"');
+		
+		// time event listener (start  2ndend startend, and other intermediate points with time)
+/*		stopwatchlive.on("startTimingevent", function(timeEvent) {
+console.log('Timing event start: "' + JSON.stringify(timeEvent) + '"');
 			
-		})
+			// pass on to the communication mixer 
+			socket.emit('startTimingout', 'starteventOUT');
+			
+		});
+*/		
+		idsetup.on("dataIDsplit", function(datainstant) {
+console.log('Received instant data: "' +  JSON.stringify(datainstant) + '"');			
+			//this.emit("startTimingevent", this.t);
+			// pass on to the communication mixer 
+			socket.emit('startEventout', JSON.stringify(datainstant));
+			
+		});
 		
 		
 		// serial usb port listener

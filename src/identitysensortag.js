@@ -28,10 +28,10 @@ identitySelf.prototype.checkIDs = function() {
 
 /**
 * a custom emitter 
-* @method write
+* @method checkSplitIDs
 */
-identitySelf.prototype.checkSplitIDs = function() {
-//console.log('building in event emitter into a class');
+identitySelf.prototype.checkSplitIDs = function(typeEvent, timeEvent) {
+console.log('building in event emitter into a class');
 //console.log(this.RSSholder);	
 	var datainstant = this.RSSholder
 	var distanceOrder = [];
@@ -42,9 +42,14 @@ identitySelf.prototype.checkSplitIDs = function() {
 	});
 	distanceOrder.sort(function(a, b) {return a[1] - b[1]})
 	// order the arrays distance lowest to highest
-//console.log('closest');
-//console.log(distanceOrder.slice(-1)[0]);	
-	this.emit("dataIDsplit", distanceOrder.slice(-1)[0]);
+console.log('closest');
+console.log(distanceOrder);	
+console.log(distanceOrder.slice(-1)[0]);
+	var extractID = distanceOrder.slice(-1)[0];
+	var timeandidentity = {};
+	timeandidentity[extractID[0]] = [typeEvent,timeEvent];	
+	
+	this.emit("dataIDsplit", timeandidentity);
 };
 
 
@@ -71,7 +76,7 @@ identitySelf.prototype.resetIDdata = function() {
 
 /**
 * a custom emitter 
-* @method write
+* @method nobleBT
 */
 identitySelf.prototype.nobleBT = function() {
 
@@ -84,72 +89,36 @@ identitySelf.prototype.nobleBT = function() {
 	  }
 	});
 
-
 	// keep object of sensortag ID. time, RSSI
-
 	var logRSSI = {};
 	var daterssiholder = [];
 		
 	noble.on('discover', function(peripheral) {
 		
 		// set emitter first time sensorID has been discover
-		
-
 		setInterval(function(){  //myTimer()
 
 		var sensordate = new Date();
-//console.log(sensordate);
-		
+//console.log(sensordate);		
 //console.log('signal strenght = distance');	
 //console.log(peripheral.rssi);
 //console.log('peripheral discovered (' + peripheral.uuid+ '):' + peripheral.advertisement.localName);	
-
 		daterssiholder.push(sensordate.getTime());
 		daterssiholder.push(peripheral.rssi);		
 		
 		logRSSI[peripheral.uuid] = daterssiholder;
-		
-
 //console.log(logRSSI);
-
 		idsetup.setID(sensordate.getTime(), logRSSI);
 
 		daterssiholder = [];
 		//logRSSI = {};
-	//console.log(sensordate.getTime());			
-	//console.log(RSSholder[sensordate.getTime()]);		
+//console.log(sensordate.getTime());			
+//console.log(RSSholder[sensordate.getTime()]);		
 
-		},500);
+		},250);
 		
 	});
 
 };	
 
 module.exports = identitySelf;
-/*
-idsetup = new identitySelf();
- setTimeout(function() {idsetup.checkIDs()},20000);
-//idsetup.checkIDs();
- setTimeout(function() {idsetup.checkIDs()},40000);
- 
- 
-idsetup.on("data", function(datainstant) {
-console.log('Received instant data: "' + datainstant + '"');
-		// loop through and extract order based on "distance"
-	var distanceOrder = [];
-	var btIDlive = Object.keys(datainstant);
-//console.log(btIDlive);	
-	btIDlive.forEach(function(iddistance) {
-//console.log(datainstant[iddistance]);	
-		distanceOrder.push([iddistance, datainstant[iddistance].slice(-1)[0]]);
-		
-	});
-//console.log(distanceOrder);
-	distanceOrder.sort(function(a, b) {return a[1] - b[1]})
-	// order the arrays distance lowest to highest
-//console.log('reordered');
-//console.log(distanceOrder);
-console.log('closest');
-console.log(distanceOrder.slice(-1)[0]);	
-})
-*/
