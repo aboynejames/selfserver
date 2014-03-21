@@ -39,8 +39,18 @@ function start(route, handle) {
 	couchin = new settings();
 	couchlive = new couchDB(couchin);
 	idsetup = new identititySelf();		
-	stopwatchlive = new MasterStopwatch(idsetup);
+
 //console.log(stopwatchlive);
+	// serial port listener for touchpad mode  (will be WIFI)
+	// open the serial port. Change the name to the name of your port, just like in Processing and Arduino:
+	var serialData = {};	// object to hold what goes out to the client   ubuntu /dev/ttyACM0   pi    /dev/ttyAMA0		
+	var myPort = new SerialPort("/dev/ttyAMA0", {
+	// look for return and newline at the end of each data packet:
+		parser: serialport.parsers.readline("\r\n")
+	});	
+	
+	stopwatchlive = new MasterStopwatch(idsetup);
+		
 
 	SensorTag.discover(function(sensorTag) {
 	//console.log('main app discover');	
@@ -176,16 +186,43 @@ console.log(pressedby);
 	
 		
 	authom.listen(app);
+
+	myPort.open(function () {
+console.log('open');
+		//myPort.on('data', function(data) {
+//console.log('data received: ' + data);
+//		});
+		
+		
+console.log('first boot salve write message');
+                        myPort.write("starte2out\r\n", function(err, results) {
+console.log('err ' + err);
+console.log('results ' + results);
+                        });
+
+		
+		// event listener to trigger a write to serial port for other slave pi to pickup
+		stopwatchlive.on("slavepiOut", function(timeOtherend) {
+console.log('call to salve event started  server location');			
+			myPort.write("e2out\r\n", function(err, results) {
+console.log('err ' + err);
+console.log('results ' + results);
+			});
+		});
+
 	
-	// serial port listener for touchpad mode  (will be WIFI)
-	// open the serial port. Change the name to the name of your port, just like in Processing and Arduino:
-	var serialData = {};	// object to hold what goes out to the client   ubuntu /dev/ttyACM0   pi    /dev/ttyAMA0		
-	var myPort = new SerialPort("/dev/ttyAMA0", {
-	// look for return and newline at the end of each data packet:
-		parser: serialport.parsers.readline("\r\n")
+		// event listener to trigger a write to serial port from BT button
+		stopwatchlive.on("contactSlave", function(timeOtherend) {
+console.log('call slave via bluetooth button press event');			
+			myPort.write("BTe2out\r\n", function(err, results) {
+console.log('err ' + err);
+console.log('results ' + results);
+			});
+		});
+		
 	});
-
-
+	
+	
 	io.sockets.on('connection', function (socket, server) {
 
 		socket.on('swimmerclientstart', function(stdata){
@@ -223,15 +260,26 @@ console.log('Received instant data: "' +  JSON.stringify(datainstant) + '"');
 			
 		});
 		
+		stopwatchlive.on("salveIDtime", function(Sdatainstant) {
+console.log('slave ID and time back from other end of pool: "' +  JSON.stringify(Sdatainstant) + '"');			
+			//this.emit("startTimingevent", this.t);
+			// pass on to the communication mixer 
+			socket.emit('startEventout', JSON.stringify(Sdatainstant));
+			
+		});
 		
 		// serial usb port listener
 		myPort.on('data', function (data) {
 			// set the value property of scores to the serial string:
 			serialData.value = data;
 			// for debugging, you should see this in Terminal:
-//console.log(data);
+console.log('masterpi radio log');			
+console.log(data);
+			// control master Server clock
+			//stopwatchlive.radiobutton(data);
+			stopwatchlive.returnIDslave(data);
 			// send a serial event to the web client with the data:
-			socket.emit('stopdwatchEvent', serialData);
+			//socket.emit('stopwatchEvent', serialData);
 		});  
 		
 		socket.on('contextMixer', function(datacontext){

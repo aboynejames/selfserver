@@ -6,6 +6,7 @@ function identitySelf() {
 	events.EventEmitter.call(this);
 	this.nobleBT(0);
 	this.RSSholder = {};
+	this.excluded = ['9059af0b879c','9059af0b86e2','9059af0b8744'];	
 }
 
 /**
@@ -40,12 +41,27 @@ console.log('building in event emitter into a class');
 		distanceOrder.push([iddistance, datainstant[iddistance].slice(-1)[0]]);
 		
 	});
-	distanceOrder.sort(function(a, b) {return a[1] - b[1]})
+	// remove button bt sensor id
+	var tidylist = [];
+	//this.excluded  to FINISH
+	distanceOrder.forEach(function(idlist) {
+//console.log(idsetup.excluded);	
+		if(idlist[0] == idsetup.excluded[0] || idlist[0] == idsetup.excluded[1] || idlist[0] == idsetup.excluded[2] )
+		{
+		}
+		else
+		{
+			tidylist.push(idlist);
+		}
+	
+	});	
+		
+	tidylist.sort(function(a, b) {return a[1] - b[1]})
 	// order the arrays distance lowest to highest
 console.log('closest');
-console.log(distanceOrder);	
-console.log(distanceOrder.slice(-1)[0]);
-	var extractID = distanceOrder.slice(-1)[0];
+console.log(tidylist);	
+console.log(tidylist.slice(-1)[0]);
+	var extractID = tidylist.slice(-1)[0];
 	var timeandidentity = {};
 	timeandidentity[extractID[0]] = [typeEvent,timeEvent];	
 	
@@ -98,20 +114,20 @@ identitySelf.prototype.nobleBT = function() {
 		// set emitter first time sensorID has been discover
 		setInterval(function(){  //myTimer()
 
-		var sensordate = new Date();
+			var sensordate = new Date();
 //console.log(sensordate);		
 //console.log('signal strenght = distance');	
 //console.log(peripheral.rssi);
 //console.log('peripheral discovered (' + peripheral.uuid+ '):' + peripheral.advertisement.localName);	
-		daterssiholder.push(sensordate.getTime());
-		daterssiholder.push(peripheral.rssi);		
-		
-		logRSSI[peripheral.uuid] = daterssiholder;
+			daterssiholder.push(sensordate.getTime());
+			daterssiholder.push(peripheral.rssi);		
+			
+			logRSSI[peripheral.uuid] = daterssiholder;
 //console.log(logRSSI);
-		idsetup.setID(sensordate.getTime(), logRSSI);
+			idsetup.setID(sensordate.getTime(), logRSSI);
 
-		daterssiholder = [];
-		//logRSSI = {};
+			daterssiholder = [];
+			//logRSSI = {};
 //console.log(sensordate.getTime());			
 //console.log(RSSholder[sensordate.getTime()]);		
 

@@ -67,7 +67,7 @@ console.log('peripherial called');
 
   this.uuid = peripheral.uuid;
 
-  this._peripheral.on('disconnect', this.onDisconnect.bind(this));
+//  this._peripheral.on('disconnect', this.onDisconnect.bind(this));
 }
 
 util.inherits(SensorTag, events.EventEmitter);
