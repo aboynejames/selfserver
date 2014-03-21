@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<jslint>
+	<file name="src/couchdb.js">
+		<issue line="16" char="40" reason="[&apos;couchdbname&apos;] is better written in dot notation." evidence="	this.couchdbname =  couchin.account[&apos;couchdbname&apos;];" severity="W" />
+		<issue line="17" char="34" reason="[&apos;couchuser&apos;] is better written in dot notation." evidence="	this.couch =  couchin.account[&apos;couchuser&apos;];" severity="W" />
+		<issue line="18" char="36" reason="[&apos;couchpwd&apos;] is better written in dot notation." evidence="	this.couchpwd = couchin.account[&apos;couchpwd&apos;];" severity="W" />
+		<issue line="63" char="20" reason="[&apos;uuids&apos;] is better written in dot notation." evidence="			jsonuud[&quot;uuids&quot;].forEach(function(udata){" severity="W" />
+		<issue line="103" char="49" reason="[&apos;couchdbname&apos;] is better written in dot notation." evidence="			buildpathurl = &apos;/&apos; + couchin.account[&apos;couchdbname&apos;] + &apos;/_design/swimmerid/_view/by_swimmerid&apos;;" severity="W" />
+		<issue line="109" char="38" reason="[&apos;couchuser&apos;] is better written in dot notation." evidence="				auth: couchin.account[&apos;couchuser&apos;] + &apos;:&apos; + couchin.account[&apos;couchpwd&apos;]" severity="W" />
+		<issue line="109" char="75" reason="[&apos;couchpwd&apos;] is better written in dot notation." evidence="				auth: couchin.account[&apos;couchuser&apos;] + &apos;:&apos; + couchin.account[&apos;couchpwd&apos;]" severity="W" />
+		<issue line="137" char="7" reason="Mixed spaces and tabs." evidence="       					});" severity="W" />
+		<issue line="143" char="1" reason="Mixed spaces and tabs." evidence="	 				" severity="W" />
+		<issue line="151" char="2" reason="Missing semicolon." evidence="}" severity="W" />
+		<issue line="163" char="3" reason="Mixed spaces and tabs." evidence="	} 	" severity="W" />
+		<issue line="173" char="1" reason="Mixed spaces and tabs." evidence="	    " severity="W" />
+		<issue line="218" char="41" reason="[&apos;couchdbname&apos;] is better written in dot notation." evidence="	buildpathurl = &apos;/&apos; + couchin.account[&apos;couchdbname&apos;] + &apos;/_design/sessiondata/_view/by_sessiondata?key=&quot;&apos; + singleid + &apos;&quot;&apos;;" severity="W" />
+		<issue line="224" char="30" reason="[&apos;couchuser&apos;] is better written in dot notation." evidence="		auth: couchin.account[&apos;couchuser&apos;] + &apos;:&apos; + couchin.account[&apos;couchpwd&apos;]" severity="W" />
+		<issue line="224" char="67" reason="[&apos;couchpwd&apos;] is better written in dot notation." evidence="		auth: couchin.account[&apos;couchuser&apos;] + &apos;:&apos; + couchin.account[&apos;couchpwd&apos;]" severity="W" />
+		<issue line="240" char="32" reason="[&apos;rows&apos;] is better written in dot notation." evidence="			callbackin(resultjs[&apos;rows&apos;]);" severity="W" />
+		<issue line="260" char="29" reason="[&apos;attentionflow&apos;] is better written in dot notation." evidence="		formstartingswimmers[&apos;attentionflow&apos;] = &apos;&lt;ol id=&quot;previousattention&quot; data-start-id=&quot;&apos; + &apos;121&apos; + &apos;&quot; data-end-id=&quot;&apos; + &apos;122&apos; + &apos;&quot; &gt;&lt;/ol&gt;&apos;;" severity="W" />
+		<issue line="264" char="25" reason="[&apos;value&apos;] is better written in dot notation." evidence="			if(rowswimrs[&apos;value&apos;])" severity="W" />
+		<issue line="266" char="43" reason="[&apos;value&apos;] is better written in dot notation." evidence="				sessiondataindex[rowswimrs[&apos;value&apos;].sessionid] = rowswimrs[&apos;value&apos;];" severity="W" />
+		<issue line="266" char="75" reason="[&apos;value&apos;] is better written in dot notation." evidence="				sessiondataindex[rowswimrs[&apos;value&apos;].sessionid] = rowswimrs[&apos;value&apos;];" severity="W" />
+		<issue line="271" char="60" reason="Missing semicolon." evidence="	pertimedata = pertimedata.sort(function(a,b){return b-a});" severity="W" />
+		<issue line="318" char="140" reason="[&apos;swimdate&apos;] is better written in dot notation." evidence="	swimdataelement += &apos;&lt;a id=&quot;&apos; + swimdatain.sessionid + &apos;&quot;  href=&quot;&quot; class=&quot;focuselement-date&quot; data-knowledgeword=&quot;&apos; + swimdatain.swiminfo[&apos;swimdate&apos;] + &apos;&quot;&gt;&apos; + swimdatain.swiminfo[&apos;swimdate&apos;] + &apos;&lt;/a&gt;&apos;;" severity="W" />
+		<issue line="318" char="181" reason="[&apos;swimdate&apos;] is better written in dot notation." evidence="	swimdataelement += &apos;&lt;a id=&quot;&apos; + swimdatain.sessionid + &apos;&quot;  href=&quot;&quot; class=&quot;focuselement-date&quot; data-knowledgeword=&quot;&apos; + swimdatain.swiminfo[&apos;swimdate&apos;] + &apos;&quot;&gt;&apos; + swimdatain.swiminfo[&apos;swimdate&apos;] + &apos;&lt;/a&gt;&apos;;" severity="W" />
+		<issue line="334" char="16" reason="[&apos;attentionmarkup&apos;] is better written in dot notation." evidence="	markanddata[&apos;attentionmarkup&apos;] = swimdataelement;" severity="W" />
+		<issue line="335" char="16" reason="[&apos;knowledgechain&apos;] is better written in dot notation." evidence="	markanddata[&apos;knowledgechain&apos;] = swimdatain.swiminfo;" severity="W" />
+		<issue line="336" char="16" reason="[&apos;splitdata&apos;] is better written in dot notation." evidence="	markanddata[&apos;splitdata&apos;] = swimdatain.splittimes;" severity="W" />
+		<issue line="383" char="23" reason="[&apos;testopensport&apos;] is better written in dot notation." evidence="	this.aggregateIDin[&apos;testopensport&apos;] = [&quot;734081--2124474577&quot;,&quot;5613079--2124474577&quot;];" severity="W" />
+		<issue line="384" char="23" reason="[&apos;testopensport2&apos;] is better written in dot notation." evidence="	this.aggregateIDin[&apos;testopensport2&apos;] = [&quot;499168--1413255847&quot;,&quot;4245186--1342236502&quot;,&quot;1830331-225205658&quot;];" severity="W" />
+		<issue line="422" char="9" reason="Function declarations should not be placed in blocks. Use a function expression or move the statement to the top of the outer function." evidence="		function controldataflow (dataid, callback) {  " severity="W" />
+		<issue line="426" char="9" reason="Function declarations should not be placed in blocks. Use a function expression or move the statement to the top of the outer function." evidence="		function finalf() { " severity="W" />
+		<issue line="434" char="9" reason="Function declarations should not be placed in blocks. Use a function expression or move the statement to the top of the outer function." evidence="		function series(item) {" severity="W" />
+		<issue line="444" char="2" reason="Mixed spaces and tabs." evidence="		    " severity="W" />
+		<issue line="489" char="9" reason="Function declarations should not be placed in blocks. Use a function expression or move the statement to the top of the outer function." evidence="		function controldataflowb (dataidb, callbackb) {  " severity="W" />
+		<issue line="493" char="9" reason="Function declarations should not be placed in blocks. Use a function expression or move the statement to the top of the outer function." evidence="		function finalfb() { " severity="W" />
+		<issue line="500" char="9" reason="Function declarations should not be placed in blocks. Use a function expression or move the statement to the top of the outer function." evidence="		function seriesb(itemb) {" severity="W" />
+		<issue line="510" char="2" reason="Mixed spaces and tabs." evidence="		    " severity="W" />
+		<issue line="521" char="9" reason="Function declarations should not be placed in blocks. Use a function expression or move the statement to the top of the outer function." evidence="		function getSwimDatacouchdbb (singleidb, callbackinb) {" severity="W" />
+		<issue line="526" char="50" reason="[&apos;couchdbname&apos;] is better written in dot notation." evidence="			buildpathurlb = &apos;/&apos; + couchin.account[&apos;couchdbname&apos;] + &apos;/_design/racesession/_view/by_racesession?key=&quot;&apos; + singleidb + &apos;&quot;&apos;;" severity="W" />
+		<issue line="532" char="38" reason="[&apos;couchuser&apos;] is better written in dot notation." evidence="				auth: couchin.account[&apos;couchuser&apos;] + &apos;:&apos; + couchin.account[&apos;couchpwd&apos;]" severity="W" />
+		<issue line="532" char="75" reason="[&apos;couchpwd&apos;] is better written in dot notation." evidence="				auth: couchin.account[&apos;couchuser&apos;] + &apos;:&apos; + couchin.account[&apos;couchpwd&apos;]" severity="W" />
+		<issue line="549" char="42" reason="[&apos;rows&apos;] is better written in dot notation." evidence="					callbackinb(resultjsb[&apos;rows&apos;]);" severity="W" />
+		<issue line="557" char="9" reason="Function declarations should not be placed in blocks. Use a function expression or move the statement to the top of the outer function." evidence="		function  senddatabackb (alldatab) {" severity="W" />
+		<issue line="566" char="36" reason="[&apos;compKnowledge&apos;] is better written in dot notation." evidence="					competitiondata[&apos;compKnowledge&apos;] = rowswimrsc[0][&apos;value&apos;].swiminfo;" severity="W" />
+		<issue line="566" char="69" reason="[&apos;value&apos;] is better written in dot notation." evidence="					competitiondata[&apos;compKnowledge&apos;] = rowswimrsc[0][&apos;value&apos;].swiminfo;" severity="W" />
+		<issue line="567" char="37" reason="[&apos;competitionData&apos;] is better written in dot notation." evidence="					competitiondata [&apos;competitionData&apos;] = rowswimrsc[0][&apos;value&apos;].splittimes;" severity="W" />
+		<issue line="567" char="72" reason="[&apos;value&apos;] is better written in dot notation." evidence="					competitiondata [&apos;competitionData&apos;] = rowswimrsc[0][&apos;value&apos;].splittimes;" severity="W" />
+		<issue line="568" char="55" reason="[&apos;value&apos;] is better written in dot notation." evidence="					competitiondataindex[rowswimrsc[0][&apos;value&apos;].sessionid] = competitiondata;" severity="W" />
+	</file>
+	<file name="src/identitysensortag.js">
+		<issue line="37" char="37" reason="Missing semicolon." evidence="	var datainstant = this.RSSholder" severity="W" />
+		<issue line="59" char="53" reason="Missing semicolon." evidence="	tidylist.sort(function(a, b) {return a[1] - b[1]})" severity="W" />
+		<issue line="59" char="55" reason="Missing semicolon." evidence="	tidylist.sort(function(a, b) {return a[1] - b[1]})" severity="W" />
+		<issue line="101" char="1" reason="Mixed spaces and tabs." evidence="	  if (state === &apos;poweredOn&apos;) {" severity="W" />
+		<issue line="102" char="1" reason="Mixed spaces and tabs." evidence="	    noble.startScanning();" severity="W" />
+		<issue line="103" char="1" reason="Mixed spaces and tabs." evidence="	  } else {" severity="W" />
+		<issue line="104" char="1" reason="Mixed spaces and tabs." evidence="	    noble.stopScanning();" severity="W" />
+		<issue line="105" char="1" reason="Mixed spaces and tabs." evidence="	  }" severity="W" />
+	</file>
+	<file name="src/masterwatch.js">
+		<issue line="89" char="23" reason="&apos;splittime&apos; is already defined." evidence="		var splittime = this.t[3] - this.t[0];" severity="W" />
+		<issue line="152" char="23" reason="&apos;splittime&apos; is already defined." evidence="		var splittime = this.t[3] - this.t[0];" severity="W" />
+	</file>
+	<file name="src/requestHandlers.js">
+		<issue line="35" char="1" reason="Mixed spaces and tabs." evidence="	  response.end(data);" severity="W" />
+		<issue line="102" char="28" reason="[&apos;aboynejames&apos;] is better written in dot notation." evidence="		couchin.resthistory[&apos;aboynejames&apos;] = &apos;&apos;;" severity="W" />
+		<issue line="334" char="2" reason="Unnecessary semicolon." evidence="};" severity="W" />
+	</file>
+	<file name="src/sensortagindex.js">
+		<issue line="80" char="27" reason="Mixed spaces and tabs." evidence="//console.log(peripheral);	  " severity="W" />
+		<issue line="81" char="32" reason="Mixed spaces and tabs." evidence="//console.log(peripheral.uuid);	  " severity="W" />
+		<issue line="127" char="27" reason="Mixed spaces and tabs." evidence="//console.log(onDiscover);	  " severity="W" />
+		<issue line="128" char="1" reason="Mixed spaces and tabs." evidence="	  " severity="W" />
+		<issue line="135" char="26" reason="Mixed spaces and tabs." evidence="//console.log(onDiscover)	    " severity="W" />
+		<issue line="136" char="1" reason="Mixed spaces and tabs." evidence="	    " severity="W" />
+	</file>
+	<file name="src/server.js">
+		<issue line="59" char="1" reason="Mixed spaces and tabs." evidence="	  " severity="W" />
+		<issue line="64" char="1" reason="Mixed spaces and tabs." evidence="	  " severity="W" />
+		<issue line="65" char="1" reason="Mixed spaces and tabs." evidence="	  " severity="W" />
+		<issue line="112" char="1" reason="Mixed spaces and tabs." evidence="	    ]);" severity="W" />
+		<issue line="135" char="27" reason="[&apos;facebookid&apos;] is better written in dot notation." evidence="		id: couchin.social[&apos;facebookid&apos;]," severity="W" />
+		<issue line="136" char="31" reason="[&apos;facebooksecret&apos;] is better written in dot notation." evidence="		secret: couchin.social[&apos;facebooksecret&apos;]," severity="W" />
+		<issue line="138" char="7" reason="Missing semicolon." evidence="	})" severity="W" />
+		<issue line="141" char="1" reason="Mixed spaces and tabs." evidence="	  service: &quot;twitter&quot;," severity="W" />
+		<issue line="142" char="1" reason="Mixed spaces and tabs." evidence="	  id: couchin.social[&apos;twitterid&apos;]," severity="W" />
+		<issue line="142" char="25" reason="[&apos;twitterid&apos;] is better written in dot notation." evidence="	  id: couchin.social[&apos;twitterid&apos;]," severity="W" />
+		<issue line="143" char="1" reason="Mixed spaces and tabs." evidence="	  secret: couchin.social[&apos;twittersecret&apos;]" severity="W" />
+		<issue line="143" char="29" reason="[&apos;twittersecret&apos;] is better written in dot notation." evidence="	  secret: couchin.social[&apos;twittersecret&apos;]" severity="W" />
+		<issue line="144" char="7" reason="Missing semicolon." evidence="	})" severity="W" />
+		<issue line="150" char="37" reason="[&apos;screen_name&apos;] is better written in dot notation." evidence="			var idname = datain.data[&apos;screen_name&apos;];" severity="W" />
+		<issue line="151" char="33" reason="[&apos;token&apos;] is better written in dot notation." evidence="			var idtoken = datain[&apos;token&apos;];" severity="W" />
+		<issue line="161" char="24" reason="&apos;idname&apos; is already defined." evidence="			var idname = datain.data[&apos;name&apos;];" severity="W" />
+		<issue line="161" char="37" reason="[&apos;name&apos;] is better written in dot notation." evidence="			var idname = datain.data[&apos;name&apos;];" severity="W" />
+		<issue line="162" char="25" reason="&apos;idtoken&apos; is already defined." evidence="			var idtoken = datain.data[&apos;&apos;]" severity="W" />
+		<issue line="162" char="42" reason="Missing semicolon." evidence="			var idtoken = datain.data[&apos;&apos;]" severity="W" />
+		<issue line="170" char="79" reason="&apos;idname&apos; used out of scope." evidence="		var path = &apos;http://localhost/ll/selfengine/src/index.html?swimmer=&apos; + idname + &apos;&amp;token=&apos; + idtoken;" severity="W" />
+		<issue line="170" char="100" reason="&apos;idtoken&apos; used out of scope." evidence="		var path = &apos;http://localhost/ll/selfengine/src/index.html?swimmer=&apos; + idname + &apos;&amp;token=&apos; + idtoken;" severity="W" />
+		<issue line="177" char="70" reason="Missing semicolon." evidence="		data = Buffer(&quot;An error occurred: &quot; + JSON.stringify(datain))" severity="W" />
+		<issue line="182" char="11" reason="Missing semicolon." evidence="		})" severity="W" />
+		<issue line="184" char="25" reason="Missing semicolon." evidence="	response.end(datain)" severity="W" />
+		<issue line="230" char="54" reason="Missing semicolon." evidence="			setTimeout(function() {idsetup.checkIDs()},4000);" severity="W" />
+	</file>
+	<file name="src/settings.js">
+		<issue line="15" char="17" reason="[&apos;couchdbname&apos;] is better written in dot notation." evidence="	this.account[&apos;couchdbname&apos;] = &apos;scbbackup&apos;;" severity="W" />
+		<issue line="16" char="17" reason="[&apos;couchuser&apos;] is better written in dot notation." evidence="	this.account[&apos;couchuser&apos;] = &apos;aboynejames&apos;;" severity="W" />
+		<issue line="17" char="17" reason="[&apos;couchpwd&apos;] is better written in dot notation." evidence="	this.account[&apos;couchpwd&apos;] = &apos;ivytree22&apos;;" severity="W" />
+		<issue line="18" char="17" reason="[&apos;cookieset&apos;] is better written in dot notation." evidence="	this.account[&apos;cookieset&apos;] = &apos;&apos;;" severity="W" />
+		<issue line="20" char="17" reason="[&apos;smtpemail&apos;] is better written in dot notation." evidence="	this.account[&apos;smtpemail&apos;] = &apos;aboynejames@gmail.com&apos;;  // smtp email account" severity="W" />
+		<issue line="21" char="17" reason="[&apos;smtppassword&apos;] is better written in dot notation." evidence="	this.account[&apos;smtppassword&apos;] = &apos;ivytree222&apos;;	" severity="W" />
+		<issue line="28" char="16" reason="[&apos;twitterid&apos;] is better written in dot notation." evidence="	this.social[&apos;twitterid&apos;] = &quot;rf0ppl4rsx12MVq4XKMScQ&quot;;" severity="W" />
+		<issue line="29" char="16" reason="[&apos;twittersecret&apos;] is better written in dot notation." evidence="	this.social[&apos;twittersecret&apos;] = &quot;eM1UzOYreAoIB6QO3sPN7X7Rakbok7EkwU7WCKg&quot;;" severity="W" />
+		<issue line="30" char="16" reason="[&apos;facebookid&apos;] is better written in dot notation." evidence="	this.social[&apos;facebookid&apos;] = &quot;764467730233961&quot;;" severity="W" />
+		<issue line="31" char="16" reason="[&apos;facebooksecret&apos;] is better written in dot notation." evidence="	this.social[&apos;facebooksecret&apos;] = &quot;be9fcf63ec6a096df981cdb2c35580c7&quot;;	" severity="W" />
+	</file>
+	<file name="src/settings-sample.js">
+		<issue line="15" char="17" reason="[&apos;couchdbname&apos;] is better written in dot notation." evidence="	this.account[&apos;couchdbname&apos;] = &apos;selfserver&apos;;" severity="W" />
+		<issue line="16" char="17" reason="[&apos;couchuser&apos;] is better written in dot notation." evidence="	this.account[&apos;couchuser&apos;] = &apos;&apos;;" severity="W" />
+		<issue line="17" char="17" reason="[&apos;couchpwd&apos;] is better written in dot notation." evidence="	this.account[&apos;couchpwd&apos;] = &apos;&apos;;" severity="W" />
+		<issue line="18" char="17" reason="[&apos;cookieset&apos;] is better written in dot notation." evidence="	this.account[&apos;cookieset&apos;] = &apos;&apos;;" severity="W" />
+		<issue line="20" char="17" reason="[&apos;smtpemail&apos;] is better written in dot notation." evidence="	this.account[&apos;smtpemail&apos;] = &apos;&apos;;  // smtp email account" severity="W" />
+		<issue line="21" char="17" reason="[&apos;smtppassword&apos;] is better written in dot notation." evidence="	this.account[&apos;smtppassword&apos;] = &apos;&apos;;" severity="W" />
+		<issue line="24" char="16" reason="[&apos;twitterid&apos;] is better written in dot notation." evidence="	this.social[&apos;twitterid&apos;] = ;" severity="W" />
+		<issue line="24" char="32" reason="Expected an identifier and instead saw &apos;;&apos;." evidence="	this.social[&apos;twitterid&apos;] = ;" severity="E" />
+		<issue line="24" char="33" reason="Missing semicolon." evidence="	this.social[&apos;twitterid&apos;] = ;" severity="W" />
+		<issue line="25" char="16" reason="[&apos;twittersecret&apos;] is better written in dot notation." evidence="	this.social[&apos;twittersecret&apos;] = ;" severity="W" />
+		<issue line="25" char="36" reason="Expected an identifier and instead saw &apos;;&apos;." evidence="	this.social[&apos;twittersecret&apos;] = ;" severity="E" />
+		<issue line="25" char="37" reason="Missing semicolon." evidence="	this.social[&apos;twittersecret&apos;] = ;" severity="W" />
+		<issue line="26" char="16" reason="[&apos;facebookid&apos;] is better written in dot notation." evidence="	this.social[&apos;facebookid&apos;] = ;" severity="W" />
+		<issue line="26" char="33" reason="Expected an identifier and instead saw &apos;;&apos;." evidence="	this.social[&apos;facebookid&apos;] = ;" severity="E" />
+		<issue line="26" char="34" reason="Missing semicolon." evidence="	this.social[&apos;facebookid&apos;] = ;" severity="W" />
+		<issue line="27" char="16" reason="[&apos;facebooksecret&apos;] is better written in dot notation." evidence="	this.social[&apos;facebooksecret&apos;] = ;" severity="W" />
+		<issue line="27" char="37" reason="Expected an identifier and instead saw &apos;;&apos;." evidence="	this.social[&apos;facebooksecret&apos;] = ;" severity="E" />
+		<issue line="27" char="38" reason="Missing semicolon." evidence="	this.social[&apos;facebooksecret&apos;] = ;" severity="W" />
+	</file>
+</jslint>
+
