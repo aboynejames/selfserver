@@ -23,7 +23,7 @@ handle["/logout"] = requestHandlers.logout;
 handle["/swimmers"] = requestHandlers.swimmers;
 handle["/swimdata"] = requestHandlers.swimdata;
 handle["/racedata"] = requestHandlers.racedata;	
-
+handle["/knowledgetemplate"] = requestHandlers.knowledgetemplate;
 //console.log(util.inspect(router));	
 
 server.start(router.route, handle);

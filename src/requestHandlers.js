@@ -269,7 +269,7 @@ console.log("Request handler for swimdata called FIRST");
 		response.end(swimmersback);  
 */	
 	}
-}
+};
 
 /**
 *  provide list training data for individual swimer
@@ -334,9 +334,75 @@ function racedata(fullpath, response, request, couchin, couchlive, authom) {
 };
 
 
+/**
+*  provide list of knowledge words and relationships
+* @method knowledgetemplate
+*
+*/
+function knowledgetemplate(fullpath, response, request, couchin, couchlive, authom) {
+console.log("Request handler for KnowledgeTemplates");	
+	// first need to check authorisation token for this individual
+	var checkpassin = '';
+	//fullpath[3] = 123412324;
+	if( fullpath[4] === couchin.resthistory[fullpath[2]])
+	{
+		checkpassin = 1;
+	}
+	
+	if(checkpassin == 1)
+	{
+		// When dealing with CORS (Cross-Origin Resource Sharing)
+		// requests, the client should pass-through its origin (the
+		// requesting domain). We should either echo that or use *
+		// if the origin was not passed.
+		var origin = (request.headers.origin || "*");
+//console.log(request.headers.origin);
+//console.log("mepath appcache mssesup");
+
+		// Check to see if this is a security check by the browser to
+		// test the availability of the API for the client. If the
+		// method is OPTIONS, the browser is check to see to see what
+		// HTTP methods (and properties) have been granted to the
+		// client.
+		if (request.method.toUpperCase() === "OPTIONS"){
+
+
+			// Echo back the Origin (calling domain) so that the
+			// client is granted access to make subsequent requests
+			// to the API.
+			response.writeHead(
+				"204",
+				"No Content",
+				{
+					"access-control-allow-origin": origin,
+					"access-control-allow-methods": "GET, POST, PUT, DELETE, OPTIONS",
+					"access-control-allow-headers": "content-type, accept",
+					"access-control-max-age": 10, // Seconds.
+					"content-length": 0
+				}
+			);
+
+			// End the response - we're not sending back any content.
+			return( response.end() );
+
+
+		}
+		// peform couchdb query to get swimmers + current data(need decide how set limit)
+		couchlive.buildKnowledgeTemplate(fullpath, response, request, couchin, couchlive, origin);
+/*
+		swimmersin = {"andy":"1234"};
+		swimmersback = JSON.stringify(swimmersin);
+		response.setHeader("access-control-allow-origin", origin);
+		response.writeHead(200, {"Content-Type": "application/json"});
+		response.end(swimmersback);  
+*/	
+	}
+};
+
 exports.start = start;
 exports.authomevent = authomevent;
 exports.logout = logout;
 exports.swimmers = swimmers;
 exports.swimdata = swimdata;
 exports.racedata = racedata;
+exports.knowledgetemplate = knowledgetemplate;
