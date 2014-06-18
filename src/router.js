@@ -1,5 +1,5 @@
 /**
-* Self Engine
+* Self Server
 *
 * routes to request
 
@@ -29,7 +29,7 @@ console.log("About to route a request for " + pathname);
     handle[pathlive](firstpath, response, request, couchin, couchlive, authom);
   }
   else {
-console.log("No request handler found for " + pathname);
+//console.log("No request handler found for " + pathname);
     response.writeHead(404, {"Content-Type": "text/html"});
     response.write("404 Not found");
     response.end();

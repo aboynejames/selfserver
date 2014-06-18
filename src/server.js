@@ -1,5 +1,5 @@
 /**
-* Self Engine
+* Self Server
 *
 * Start node.js  Server
 *
@@ -39,83 +39,19 @@ function start(route, handle) {
 	couchin = new settings();
 	couchlive = new couchDB(couchin);
 	idsetup = new identititySelf();		
+	stopwatchlive = new MasterStopwatch(idsetup);	
 
 //console.log(stopwatchlive);
 	// serial port listener for touchpad mode  (will be WIFI)
 	// open the serial port. Change the name to the name of your port, just like in Processing and Arduino:
 	var serialData = {};	// object to hold what goes out to the client   ubuntu /dev/ttyACM0   pi    /dev/ttyAMA0		
-	var myPort = new SerialPort("/dev/ttyAMA0", {
+/*	var myPort = new SerialPort("/dev/ttyAMA0", {
 	// look for return and newline at the end of each data packet:
 		parser: serialport.parsers.readline("\r\n")
 	});	
-	
-	stopwatchlive = new MasterStopwatch(idsetup);
-		
-
-	SensorTag.discover(function(sensorTag) {
-	//console.log('main app discover');	
-	//console.log(sensorTag._peripheral.uuid); 
-	//console.log(sensorTag._peripheral._noble._peripherals[sensorTag._peripheral.uuid].rssi);
-	  
-		sensorTag.on('disconnect', function()  {
-	//console.log('disconnected!');
-		process.exit(0);
-		});
-	  
-	  
-		async.series([
-		function(callback) {
-console.log('connect');
-			sensorTag.connect(callback);
-		},
-		function(callback) {
-console.log('discoverServicesAndCharacteristics');
-			sensorTag.discoverServicesAndCharacteristics(callback);
-		},
-		function(callback) {
-console.log('readDeviceName');
-			sensorTag.readDeviceName(function(deviceName) {
-console.log('\tdevice name = ' + deviceName);
-				callback();
-			});
-		},
-		function(callback) {
-console.log('readSystemId');
-			sensorTag.readSystemId(function(systemId) {
-console.log('\tsystem id = ' + systemId);
-				callback();
-			});
-		},
-		function(callback) {
-console.log('readSimpleRead');
-			sensorTag.on('simpleKeyChange', function(left, right, pressedby) {
-
-	//console.log('left: ' + left);
-	//console.log('right: ' + right);
-				if(left || right)
-				{
-console.log('pressed by');			
-console.log(pressedby);				
-					stopwatchlive.startbutton(pressedby);
-				}
-
-				if (left && right) {
-					sensorTag.notifySimpleKey(callback);
-
-				}
-			});
-
-			sensorTag.notifySimpleKey(function() {
-
-			});
-		}
-	    ]);
-
-	});
+*/	
 
 
-
-		
 	var app = http.createServer(onRequest).listen(8881);
 		
 	function onRequest(request, response) {
@@ -127,78 +63,21 @@ console.log(pressedby);
 	}
 	
 	// data for live two way socket data flow for real time display everywhere
-	var io = sio.listen(app);	
-
+	var io = sio.listen(app);
 	
-	authom.createServer({
-		service: "facebook",
-		id: couchin.social['facebookid'],
-		secret: couchin.social['facebooksecret'],
-		fields: ['name', 'picture']
-	})
-
-	authom.createServer({		
-	  service: "twitter",
-	  id: couchin.social['twitterid'],
-	  secret: couchin.social['twittersecret']
-	})
-		
-	authom.on("auth", function(request, response, datain) {
-
-		if(datain.service == "twitter")
-		{
-			var idname = datain.data['screen_name'];
-			var idtoken = datain['token'];
-
-			couchlive.aggregateID(idname);	
-			// keep trake of user id & token & expiry time (not added yet)
-			//restlog[idname] = idtoken;
-			couchin.resthistory[idname] = idtoken;
-			
-		}
-		else if (datain.service == "facebook")
-		{
-			var idname = datain.data['name'];
-			var idtoken = datain.data['']
-		}
-		
-
-
-		// after the session middleware has executed, let's finish processing the request
-		//res.writeHead(200, {'Content-Type': 'text/plain'});
-		//res.write(setsession);
-		var path = 'http://localhost/ll/selfengine/src/index.html?swimmer=' + idname + '&token=' + idtoken;
-		response.writeHead(302, {'Location': path});
-		response.end();
-	
-	});
-
-	authom.on("error", function(request, response, datain){
-		data = Buffer("An error occurred: " + JSON.stringify(datain))
-
-		request.writeHead(500, {
-			"Content-Type": "text/plain",
-			"Content-Length": datain.length
-		})
-
-	response.end(datain)
-	});
-	
-		
-	authom.listen(app);
-
+/*
 	myPort.open(function () {
-console.log('open');
-		//myPort.on('data', function(data) {
+//console.log('open');
+		myPort.on('data', function(data) {
 //console.log('data received: ' + data);
-//		});
+		});
 		
 		
-console.log('first boot salve write message');
-                        myPort.write("starte2out\r\n", function(err, results) {
-console.log('err ' + err);
-console.log('results ' + results);
-                        });
+//console.log('first boot salve write message');
+ //                       myPort.write("starte2out\r\n", function(err, results) {
+//console.log('err ' + err);
+//console.log('results ' + results);
+//                      });
 
 		
 		// event listener to trigger a write to serial port for other slave pi to pickup
@@ -221,23 +100,23 @@ console.log('results ' + results);
 		});
 		
 	});
-	
+*/	
 	
 	io.sockets.on('connection', function (socket, server) {
 
 		socket.on('swimmerclientstart', function(stdata){
 			socket.emit('startnews', 'localpi');
-			setTimeout(function() {idsetup.checkIDs()},4000);
+			setTimeout(function() {idsetup.checkIDs()},12000);
 
 			idsetup.on("IDdata", function(datainstant) {
-console.log('Received starting ids: "' + datainstant + '"');
+//console.log('Received starting ids: "' + datainstant + '"');
 				socket.emit('startSwimmers', datainstant);
 			});
 
 		});
 		
 		socket.on('checkSplitID', function(stdata){
-console.log('identity split event socket');			
+//console.log('identity split event socket');			
 			idsetup.checkSplitIDs();
 
 		});
@@ -253,7 +132,7 @@ console.log('Timing event start: "' + JSON.stringify(timeEvent) + '"');
 		});
 */		
 		idsetup.on("dataIDsplit", function(datainstant) {
-console.log('Received instant data: "' +  JSON.stringify(datainstant) + '"');			
+//console.log('Received instant data: "' +  JSON.stringify(datainstant) + '"');			
 			//this.emit("startTimingevent", this.t);
 			// pass on to the communication mixer 
 			socket.emit('startEventout', JSON.stringify(datainstant));
@@ -261,13 +140,13 @@ console.log('Received instant data: "' +  JSON.stringify(datainstant) + '"');
 		});
 		
 		stopwatchlive.on("salveIDtime", function(Sdatainstant) {
-console.log('slave ID and time back from other end of pool: "' +  JSON.stringify(Sdatainstant) + '"');			
+//console.log('slave ID and time back from other end of pool: "' +  JSON.stringify(Sdatainstant) + '"');			
 			//this.emit("startTimingevent", this.t);
 			// pass on to the communication mixer 
 			socket.emit('startEventout', JSON.stringify(Sdatainstant));
 			
 		});
-		
+/*		
 		// serial usb port listener
 		myPort.on('data', function (data) {
 			// set the value property of scores to the serial string:
@@ -281,7 +160,7 @@ console.log(data);
 			// send a serial event to the web client with the data:
 			//socket.emit('stopwatchEvent', serialData);
 		});  
-		
+*/		
 		socket.on('contextMixer', function(datacontext){
 //console.log(util.inspect(data));
 //console.log('context mixer in');								
@@ -291,6 +170,226 @@ console.log(data);
 
 		
 	});
+/*
+// for offline by passing of third party login for TESTING
+			couchlive.checkPersonaldataStore(couchlive, "aboynejames" + "7766872");
+
+			var setupIDdatabase = {};
+			setupIDdatabase.token = "7766872-4Hmh0YN2VuP6DTdlWUS3iLsHqx7TigypYTEolCADdM";
+			setupIDdatabase.database = "aboynejames" + "7766872";
+			couchin.resthistory['aboynejames'] = setupIDdatabase;
+*/
+	
+	/*
+	* Authorisation sign in / identity storage setup
+	*
+	*/
+	authom.createServer({
+		service: "facebook",
+		id: couchin.social['facebookid'],
+		secret: couchin.social['facebooksecret'],
+		fields: ['name', 'picture']
+	})
+
+	authom.createServer({
+		service: "facebook",
+		name: "facebook2",
+		id: couchin.social['facebookid'],
+		secret: couchin.social['facebooksecret'],
+		fields: ['name', 'picture']
+	})
+	
+	authom.createServer({		
+	  service: "twitter",
+	  name: "twitter",
+	  id: couchin.social['twitterid'],
+	  secret: couchin.social['twittersecret']
+	})
+
+	authom.createServer({		
+	  service: "twitter",
+	  name: "twitter2",		
+	  id: couchin.social['twitterid'],
+	  secret: couchin.social['twittersecret']
+	})
+	
+	authom.createServer({		
+	  service: "twitter",
+	  name: "twitter3",		
+	  id: couchin.social['twitterid'],
+	  secret: couchin.social['twittersecret']
+	})
+	
+	authom.on("auth", function(request, response, datain) {
+//console.log(datain);
+		if(datain.service == "twitter")
+		{
+			// has a couchdb personal data store be setup for this identity? if not create one
+			couchlive.checkPersonaldataStore(couchlive, datain.data.screen_name + datain.id);
+			
+			var idname = datain.data['screen_name'];
+			var idtoken = datain['token'];
+
+			//couchlive.aggregateID(datain.data.screen_name + datain.id);	
+			// keep trake of user id & token & expiry time (not added yet)
+			var setupIDdatabase = {};
+			setupIDdatabase.token = idtoken;
+			setupIDdatabase.database = datain.data.screen_name + datain.id;
+			couchin.resthistory[idname] = setupIDdatabase;
+			
+			var returnurl =  'http://localhost/ll/selfengine/src/index.html?swimmer=';
+			
+		}
+		else if(datain.service == "twitter2")
+		{
+			// has a couchdb personal data store be setup for this identity? if not create one
+			couchlive.checkPersonaldataStore(couchlive, datain.data.screen_name + datain.id);
+			
+			var idname = datain.data['screen_name'];
+			var idtoken = datain['token'];
+
+			var setupIDdatabase = {};
+			setupIDdatabase.token = idtoken;
+			setupIDdatabase.database = datain.data.screen_name + datain.id;
+			couchin.resthistory[idname] = setupIDdatabase;
+//console.log('token set live');
+//console.log(couchin.resthistory);
+				
+			
+			//couchlive.aggregateID(datain.data.screen_name + datain.id);	
+			// keep trake of user id & token & expiry time (not added yet)
+			//restlog[idname] = idtoken;
+			
+			//var returnurl =  'http://localhost/ll/selfengine/src/index.html?swimmer=';
+			var returnurl =  'http://localhost/ll/opensportproject/swimtraintimer/communication/src/index.html?swimmer=';
+			
+		}
+		else if(datain.service == "twitter3")
+		{
+			// has a couchdb personal data store be setup for this identity? if not create one
+			couchlive.checkPersonaldataStore(couchlive, datain.data.screen_name + datain.id);
+			
+			var idname = datain.data['screen_name'];
+			var idtoken = datain['token'];
+
+			var setupIDdatabase = {};
+			setupIDdatabase.token = idtoken;
+			setupIDdatabase.database = 'swimknowledge';//screen_name + datain.id;
+			couchin.resthistory[idname] = setupIDdatabase;
+//console.log('token set live');
+//console.log(couchin.resthistory);
+				
+			
+			//couchlive.aggregateID(datain.data.screen_name + datain.id);	
+			// keep trake of user id & token & expiry time (not added yet)
+			//restlog[idname] = idtoken;
+			
+			//var returnurl =  'http://localhost/ll/selfengine/src/index.html?swimmer=';
+			var returnurl =  'http://localhost/ll/selfknowledge/src/index.html?swimmer=';
+			
+		}
+
+		else if (datain.service == "facebook")
+		{
+console.log(datain);
+			var infbname = datain.data.name.replace(/\s+/g, '').toLowerCase(); ;//data['name'];
+			
+			couchlive.checkPersonaldataStore(couchlive, infbname + datain.id);
+			
+			var idname = infbname;
+			// create a token string
+			hashCode = function(str){
+				var hash = 0;
+				if (str.length === 0) return hash;
+					for (i = 0; i < str.length; i++) {
+						char = str.charCodeAt(i);
+						hash = ((hash<<5)-hash)+char;
+						hash = hash & hash; // Convert to 32bit integer
+					}
+console.log('hash');
+console.log(hash);					
+					return hash;
+				};			
+			var idtoken = hashCode(datain.id) + 'k';
+
+			var setupIDdatabase = {};
+			setupIDdatabase.token = idtoken;
+			setupIDdatabase.database = infbname + datain.id;//screen_name + datain.id;
+			couchin.resthistory[idname] = setupIDdatabase;
+//console.log('token set live');
+//console.log(couchin.resthistory);
+				
+			
+			//couchlive.aggregateID(datain.data.screen_name + datain.id);	
+			// keep trake of user id & token & expiry time (not added yet)
+			//restlog[idname] = idtoken;
+			
+			//var returnurl =  'http://localhost/ll/selfengine/src/index.html?swimmer=';
+			var returnurl =  'http://localhost/ll/selfengine/src/index.html?swimmer=';
+						
+		}
+		else if (datain.service == "facebook2")
+		{
+console.log(datain);
+			var infbname = datain.data.name.replace(/\s+/g, '').toLowerCase(); ;//data['name'];
+			
+			couchlive.checkPersonaldataStore(couchlive, infbname + datain.id);
+			
+			var idname = infbname;
+			// create a token string
+			hashCode = function(str){
+				var hash = 0;
+				if (str.length === 0) return hash;
+					for (i = 0; i < str.length; i++) {
+						char = str.charCodeAt(i);
+						hash = ((hash<<5)-hash)+char;
+						hash = hash & hash; // Convert to 32bit integer
+					}
+console.log('hash');
+console.log(hash);					
+					return hash;
+				};			
+			var idtoken = hashCode(datain.id) + 'k';
+
+			var setupIDdatabase = {};
+			setupIDdatabase.token = idtoken;
+			setupIDdatabase.database = infbname + datain.id;//screen_name + datain.id;
+			couchin.resthistory[idname] = setupIDdatabase;
+//console.log('token set live');
+//console.log(couchin.resthistory);
+			//couchlive.aggregateID(datain.data.screen_name + datain.id);	
+			// keep trake of user id & token & expiry time (not added yet)
+			//restlog[idname] = idtoken;
+			
+			//var returnurl =  'http://localhost/ll/selfengine/src/index.html?swimmer=';
+			var returnurl = 'http://localhost/ll/opensportproject/swimtraintimer/communication/src/index.html?swimmer=';
+						
+		}
+		
+
+		// after the session middleware has executed, let's finish processing the request
+		//res.writeHead(200, {'Content-Type': 'text/plain'});
+		//res.write(setsession);
+		var path = returnurl + idname + '&token=' + idtoken + '&fbn=' + datain.data.name;
+console.log(path);		
+		response.writeHead(302, {'Location': path});
+		response.end();
+	
+	});
+
+	authom.on("error", function(request, response, datain){
+		data = Buffer("An error occurred: " + JSON.stringify(datain))
+
+		request.writeHead(500, {
+			"Content-Type": "text/plain",
+			"Content-Length": datain.length
+		})
+
+	response.end(datain)
+	});
+	
+		
+	authom.listen(app);
 		
 } // closes start function 
 

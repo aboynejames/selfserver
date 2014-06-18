@@ -6,7 +6,7 @@ function identitySelf() {
 	events.EventEmitter.call(this);
 	this.nobleBT(0);
 	this.RSSholder = {};
-	this.excluded = ['9059af0b879c','9059af0b86e2','9059af0b8744'];	
+	this.excluded = ['9059af0b879c','9059af0b86e2','9059af0b8744','9059af0b869c'];	
 }
 
 /**

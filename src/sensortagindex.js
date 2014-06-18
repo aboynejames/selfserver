@@ -67,14 +67,17 @@ console.log('peripherial called');
 
   this.uuid = peripheral.uuid;
 
-//  this._peripheral.on('disconnect', this.onDisconnect.bind(this));
+  this._peripheral.on('disconnect', this.onDisconnect.bind(this));
 }
 
 util.inherits(SensorTag, events.EventEmitter);
 
 SensorTag.discover = function(callback, uuid) {
 console.log('discover call');
-
+//console.log(callback);
+//console.log(uuid);	
+//setTimeout(function() {
+//	  }, 2000);
   var onDiscover = function(peripheral) {
 //console.log('ppp object looks like');
 //console.log(peripheral);	  
@@ -86,7 +89,7 @@ console.log('discover call');
 		//noble.stopScanning();
 //console.log(peripheral);		
 		var sensorTag = new SensorTag(peripheral);
-//console.log('stag');
+console.log('stag1');
 //console.log(sensorTag);
 
 		callback(sensorTag);
@@ -97,7 +100,7 @@ console.log('discover call');
 		//noble.stopScanning();
 //console.log(peripheral);		
 		var sensorTagtwo = new SensorTag(peripheral);
-//console.log('ar two');
+console.log('stag2');
 //console.log(sensorTagtwo);
 
 		callback(sensorTagtwo);
@@ -106,37 +109,60 @@ console.log('discover call');
 	}
 	else if (peripheral.uuid === '9059af0b8744' &&   ( uuid === undefined || uuid === peripheral.uuid ))
 	{
+
 		//noble.removeListener('discover', onDiscover);
 		//noble.stopScanning();
 //console.log(peripheral);		
 		var sensorTagthree = new SensorTag(peripheral);
-//console.log('ar two');
+console.log('stag3');
 //console.log(sensorTagtwo);
 
 		callback(sensorTagthree);
+	
+		
+	}
+	
+	else if (peripheral.uuid === '9059af0b869c' &&   ( uuid === undefined || uuid === peripheral.uuid ))
+	{
+		//noble.removeListener('discover', onDiscover);
+		//noble.stopScanning();
+//console.log(peripheral);		
+		var sensorTagfour = new SensorTag(peripheral);
+console.log('stag4');
+//console.log(sensorTagtwo);
+
+		callback(sensorTagfour);
 		
 		
 	}
+	
   };
-
+//setInterval(function(){
   if (noble.state == 'poweredOn')
   {
+setTimeout(function() {
       noble.on('discover', onDiscover);
       noble.startScanning();
-//console.log('powerup noble');
+console.log('powerup noble');
 //console.log(onDiscover);	  
-	  
+},20000);		  
   }
   else {
     noble.once('stateChange', function() {
+setTimeout(function() {
+//setInterval(function(){	    
       noble.on('discover', onDiscover);
       noble.startScanning();
-//console.log('change noble');
+console.log('change noble');
 //console.log(onDiscover)	    
-	    
+
+},20000);	
+
+
+	
     });
   }
-  
+//  },10000);	
 };
 
 SensorTag.prototype.onDisconnect = function() {
