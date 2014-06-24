@@ -237,7 +237,7 @@ console.log(data);
 			setupIDdatabase.database = datain.data.screen_name + datain.id;
 			couchin.resthistory[idname] = setupIDdatabase;
 			
-			var returnurl =  'http://localhost/ll/selfengine/src/index.html?swimmer=';
+			var returnurl =  couchin.account.baseurl;
 			
 		}
 		else if(datain.service == "twitter2")
@@ -252,16 +252,8 @@ console.log(data);
 			setupIDdatabase.token = idtoken;
 			setupIDdatabase.database = datain.data.screen_name + datain.id;
 			couchin.resthistory[idname] = setupIDdatabase;
-//console.log('token set live');
-//console.log(couchin.resthistory);
-				
-			
-			//couchlive.aggregateID(datain.data.screen_name + datain.id);	
-			// keep trake of user id & token & expiry time (not added yet)
-			//restlog[idname] = idtoken;
-			
-			//var returnurl =  'http://localhost/ll/selfengine/src/index.html?swimmer=';
-			var returnurl =  'http://localhost/ll/opensportproject/swimtraintimer/communication/src/index.html?swimmer=';
+
+			var returnurl =  couchin.account.basestopwatch;
 			
 		}
 		else if(datain.service == "twitter3")
@@ -276,16 +268,8 @@ console.log(data);
 			setupIDdatabase.token = idtoken;
 			setupIDdatabase.database = 'swimknowledge';//screen_name + datain.id;
 			couchin.resthistory[idname] = setupIDdatabase;
-//console.log('token set live');
-//console.log(couchin.resthistory);
-				
-			
-			//couchlive.aggregateID(datain.data.screen_name + datain.id);	
-			// keep trake of user id & token & expiry time (not added yet)
-			//restlog[idname] = idtoken;
-			
-			//var returnurl =  'http://localhost/ll/selfengine/src/index.html?swimmer=';
-			var returnurl =  'http://localhost/ll/selfknowledge/src/index.html?swimmer=';
+
+			var returnurl = couchin.account.baseknowledge;
 			
 		}
 
@@ -316,16 +300,8 @@ console.log(hash);
 			setupIDdatabase.token = idtoken;
 			setupIDdatabase.database = infbname + datain.id;//screen_name + datain.id;
 			couchin.resthistory[idname] = setupIDdatabase;
-//console.log('token set live');
-//console.log(couchin.resthistory);
-				
-			
-			//couchlive.aggregateID(datain.data.screen_name + datain.id);	
-			// keep trake of user id & token & expiry time (not added yet)
-			//restlog[idname] = idtoken;
-			
-			//var returnurl =  'http://localhost/ll/selfengine/src/index.html?swimmer=';
-			var returnurl =  'http://localhost/ll/selfengine/src/index.html?swimmer=';
+
+			var returnurl =  couchin.account.baseurl;
 						
 		}
 		else if (datain.service == "facebook2")
@@ -355,14 +331,8 @@ console.log(hash);
 			setupIDdatabase.token = idtoken;
 			setupIDdatabase.database = infbname + datain.id;//screen_name + datain.id;
 			couchin.resthistory[idname] = setupIDdatabase;
-//console.log('token set live');
-//console.log(couchin.resthistory);
-			//couchlive.aggregateID(datain.data.screen_name + datain.id);	
-			// keep trake of user id & token & expiry time (not added yet)
-			//restlog[idname] = idtoken;
-			
-			//var returnurl =  'http://localhost/ll/selfengine/src/index.html?swimmer=';
-			var returnurl = 'http://localhost/ll/opensportproject/swimtraintimer/communication/src/index.html?swimmer=';
+
+			var returnurl = couchin.account.basestopwatch;
 						
 		}
 		

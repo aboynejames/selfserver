@@ -19,6 +19,10 @@ var settings = function() {
 		
 	this.account['smtpemail'] = '';  // smtp email account
 	this.account['smtppassword'] = '';
+	//  return hosting urls per app selfengin, stopwatch, knowledge  
+	this.account['baseurl'] = '';
+	this.account['basestopwatch'] = '';
+	this.account['baseknowledge'] = '';	  
 
 	this.social = {};
 	this.social['twitterid'] = ;
