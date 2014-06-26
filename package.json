@@ -1,0 +1,43 @@
+{
+    "name" : "SelfServer",
+    "description" : "augmented self intelligence",
+    "homepage": "http://www.opensportproject.org>",
+    "version" : "0.1.46",
+    "author" : "James Littlejohn <james@aboynejames.co.uk> (https://twitter.com/aboynejames)",
+    "keywords": [
+        "self",
+        "intelligence",
+        "quantified self",
+        "analysis"
+    ],
+    "contributors": [
+        "some soon",
+        "and then some more",
+        "maybe a community"
+    ],
+"scripts" : {
+        "test" : "node_modules/.bin/buster-test -r specification"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/aboynejames/selfserver"
+    },
+    "bugs": {
+        "url": "https://github.com/aboynejames/selfserver/issues"
+    },
+    "main": "./src/index.js",
+    "license": "MIT (http://)",
+    "devDependencies" : {
+        "buster" : ">=0.6.1",
+	"casperjs" : ">=1.1.0"
+    },
+    "engines" : {
+        "node" : ">=0.10"
+    },
+    "dependencies": {
+    "socket.io": "~0.9.16",
+    "authom": "~0.4.20",
+
+  },
+}
+
