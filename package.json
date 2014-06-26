@@ -36,7 +36,7 @@
     },
     "dependencies": {
     "socket.io": "~0.9.16",
-    "authom": "~0.4.20",
+    "authom": "~0.4.20"
 
   },
 }
