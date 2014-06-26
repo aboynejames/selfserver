@@ -1,7 +1,7 @@
 SelfServer
 ==========
 
-The SelfServer works with the SelfEngine https://github.com/aboynejames/selfengine 
+The SelfServer works with the SelfEngine - augmented self intelligence https://github.com/aboynejames/selfengine 
 
 
 Hosting a SelfServer
