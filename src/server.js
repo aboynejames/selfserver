@@ -24,7 +24,7 @@ var authom = require("authom");
 var EmailClient = require("./emailclient");
 //var identititySelf = require("./identitysensortag");
 var async = require('async');
-var SensorTag = require('./sensortagindex');
+//var SensorTag = require('./sensortagindex');
 var MasterStopwatch = require("./masterwatch");
 
 
