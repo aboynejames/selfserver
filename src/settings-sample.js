@@ -11,7 +11,8 @@
 * @version    $Id$
 */
 var settings = function() {
-  this.account = {};
+	
+	this.account = {};
 	this.account['couchdbname'] = 'selfserver';
 	this.account['couchuser'] = '';
 	this.account['couchpwd'] = '';
@@ -23,7 +24,8 @@ var settings = function() {
 	this.account['baseurl'] = '';
 	this.account['basestopwatch'] = '';
 	this.account['baseknowledge'] = '';	  
-
+	this.account['basesensor'] = '';	  
+	  
 	this.social = {};
 	this.social['twitterid'] = ;
 	this.social['twittersecret'] = ;

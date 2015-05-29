@@ -19,18 +19,42 @@ var http = require('http');
 *
 */
 function start(fullpath, response) {
-  console.log("Request handler 'start' was called.");
 
 	var data  = '';
 
-  fs.readFile('./index.html', function(err, data) {
+	fs.readFile('./index.html', function(err, data) {
 		response.setHeader('Access-Control-Allow-Origin', '*');
 		response.setHeader('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
-    response.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+		response.setHeader('Access-Control-Allow-Headers', 'Content-Type');
 		response.writeHead(200, {"Content-Type": "text/html"});
-
-	  response.end(data);
+		response.end(data);
 	});	
+     
+}
+
+/**
+* check token and account live
+* @method livetokenaccount
+*
+*/
+function livetokenaccount(liveaccount, livetoken, couchin, response,  request) {
+
+	if(couchin.resthistory[liveaccount] != undefined && couchin.resthistory[liveaccount] != undefined )
+	{
+	
+		if(  livetoken === couchin.resthistory[liveaccount].token)
+		{
+			var result = "passedenter";
+			return result;
+		
+		}
+	}
+	else
+	{
+		var result = "nopass";
+		return result;
+		
+	}
      
 }
 
@@ -75,11 +99,11 @@ function logout (fullpath, response, request, couchin, couchlive) {
 		// remove the token log for logout id
 		couchin.resthistory['aboynejames'] = '';
 	
-					correctpwd = {"logout":"success"};
-					checkjson = JSON.stringify(correctpwd);
-					response.setHeader("access-control-allow-origin", origin);
-					response.writeHead(200, {"Content-Type": "application/json"});
-					response.end(checkjson);
+		correctpwd = {"logout":"success"};
+		checkjson = JSON.stringify(correctpwd);
+		response.setHeader("access-control-allow-origin", origin);
+		response.writeHead(200, {"Content-Type": "application/json"});
+		response.end(checkjson);
 
 }  // closes sigincheck
 
@@ -89,7 +113,6 @@ function logout (fullpath, response, request, couchin, couchlive) {
 *
 */
 function swimdata(fullpath, response, request, couchin, couchlive, authom) {
-console.log("Request handler for swimdata called FIRST");	
 	// first need to check authorisation token for this individual
 	var checkpassin = '';
 	//fullpath[3] = 123412324;
@@ -143,12 +166,8 @@ console.log("Request handler for swimdata called FIRST");
 *
 */
 function racedata(fullpath, response, request, couchin, couchlive, authom) {
-//console.log("Request handler for RACEdata called");
-//console.log(fullpath);
-//console.log(couchin.resthistory);
 	// first need to check authorisation token for this individual
 	var checkpassin = '';
-	//fullpath[3] = 123412324;
 	if( fullpath[4] === couchin.resthistory[fullpath[2]].token)
 	{
 		checkpassin = 1;
@@ -203,11 +222,8 @@ function racedata(fullpath, response, request, couchin, couchlive, authom) {
 *
 */
 function knowledgetemplate(fullpath, response, request, couchin, couchlive, authom) {
-console.log("Request handler for KnowledgeTemplates");	
 	// first need to check authorisation token for this individual
 	var checkpassin = '';
-console.log(fullpath[4]);
-console.log(couchin.resthistory[fullpath[2]].token);	
 	
 	if( fullpath[4] === couchin.resthistory[fullpath[2]].token)
 	{
@@ -254,13 +270,7 @@ console.log(couchin.resthistory[fullpath[2]].token);
 		}
 		// peform couchdb query to get swimmers + current data(need decide how set limit)
 		couchlive.buildKnowledgeTemplate(fullpath, response, request, couchin, couchlive, origin);
-/*
-		swimmersin = {"andy":"1234"};
-		swimmersback = JSON.stringify(swimmersin);
-		response.setHeader("access-control-allow-origin", origin);
-		response.writeHead(200, {"Content-Type": "application/json"});
-		response.end(swimmersback);  
-*/	
+
 	}
 };
 
@@ -269,18 +279,17 @@ console.log(couchin.resthistory[fullpath[2]].token);
 * @method swimdatasave
 *
 */
-function swimdatasave(fullpath, response, request, couchin, couchlive) {
-console.log("saves data back from communication mixer and selfengine");
-	var checkpassin = '';
-	var livedatabase = couchin.resthistory[fullpath[2]].database;
+function swimdatasave(fullpath, response, request, couchin, couchlive, authom, emaillive) {
 
-	if( fullpath[4] === couchin.resthistory[fullpath[2]].token && couchin.resthistory[fullpath[2]] != undefined )
-	{
-		checkpassin = 1;
-	}
+	var checkpassin = '';
+	var livedatabase = '';
+
+	// check token and db are live if not tell user to re signing
+	var secpassed = livetokenaccount(fullpath[2], fullpath[4], couchin, response, request);
 	
-	if(checkpassin == 1)
+	if(secpassed == "passedenter")
 	{
+		livedatabase = couchin.resthistory[fullpath[2]].database;
                 // When dealing with CORS (Cross-Origin Resource Sharing)
                 // requests, the client should pass-through its origin (the
                 // requesting domain). We should either echo that or use *
@@ -319,21 +328,25 @@ console.log("saves data back from communication mixer and selfengine");
 			});	
 		
 			request.on('end', function() {
-				cleandata =  JSON.parse(syncdatain);
+			cleandata =  JSON.parse(syncdatain);
 			// next make a PUT call to couchdb API
-console.log(cleandata);
+
 				// first need to see what type of save  data, id settings etc. and route appropriately
-				if(cleandata.bluetoothid)
+				if(cleandata.sensorid)
 				{
+					
 					function syncUIDcall(livedatabase, callback) {  
 						couchlive.getUIDfromcouch(callback);
 							
 					}  
 
 					syncUIDcall(livedatabase, function(responseuid) {  
-console.log(' bt id save');
-						//cleandata = {"split":"1334.34"};
+
 						couchlive.syncsave(cleandata, responseuid, livedatabase);
+						// activate sync replication for this pairing
+						// first query centralized pariing db and pass on two part of info to filter function
+						couchlive.matchpeers(cleandata.sensorid, fullpath, couchin, couchlive, livedatabase); 
+						
 						// set the id live
 						setTimeout(function() {couchlive.setWearableIDs(livedatabase)}, 600);
 
@@ -348,6 +361,7 @@ console.log(' bt id save');
 				// record data manually entered
 				else if(cleandata.lifedata)
 				{
+				
 					function syncUIDcall(livedatabase, callback) {  
 						couchlive.getUIDfromcouch(callback);
 							
@@ -368,13 +382,13 @@ console.log(' bt id save');
 				// save identity added
 				else if(cleandata.networkidentity)
 				{
+					
 					function syncUIDcall(livedatabase, callback) {  
 						couchlive.getUIDfromcouch(callback);
 							
 					}  
 
 					syncUIDcall(livedatabase, function(responseuid) {  
-
 						//cleandata = {"split":"1334.34"};
 						couchlive.syncsave(cleandata, responseuid, livedatabase);
 						syncresponse = {"save":"passednetworkid"};
@@ -386,10 +400,11 @@ console.log(' bt id save');
 					});
 				}				
 				//  need to look at ID tag for data coming in, if matches this account  OK save else need to look up ID of tag and match to an account. If not account log centrally for now (or ask for email for that ID)
-				else if(cleandata.swimmerid)
+				else if(cleandata.name)
 				{
+
 					if(cleandata['name'] ) {		
-console.log(' a name save');
+
 						function syncUIDcall(livedatabase, callback) {  
 							couchlive.getUIDfromcouch(callback);
 							
@@ -406,16 +421,76 @@ console.log(' a name save');
 							response.end(checksync);
 						});
 					}
+				}
+				else if(cleandata.sensorengine)
+				{
+					if(cleandata.sensorengine ) {		
+
+						function syncUIDcall(livedatabase, callback) {  
+							couchlive.getUIDfromcouch(callback);
+							
+						}  
+					
+						syncUIDcall(livedatabase, function(responseuid) {  
+
+							couchlive.syncsave(cleandata, responseuid, livedatabase);
+							
+							syncresponse = {"sync":"passedsensor"};
+							checksync = JSON.stringify(syncresponse);
+							response.setHeader("access-control-allow-origin", origin);
+							response.writeHead(200, {"Content-Type": "application/json"});
+							response.end(checksync);
+						});
+					}
 					else
 					{
-console.log(' standard save to couchdb');				
+					// 
+						syncresponse = {"sync":"passed"};
+						checksync = JSON.stringify(syncresponse);
+						response.setHeader("access-control-allow-origin", origin);
+						response.writeHead(200, {"Content-Type": "application/json"});
+						response.end(checksync);
+					
+					}
+				}
+				else if(cleandata.peernetwork)
+				{
+					// neet to notify peer network that new data is availabe
+					peernoticelist = {};
+					//peernoticelist = cleandata.peernetwork;
+					peernoticelist.email = "james@aboynejames.co.uk";
+					emaillive.sendemail(peernoticelist);
+						
+					syncresponsee = {"sync":"passed"};
+					checksynce = JSON.stringify(syncresponsee);
+					response.setHeader("access-control-allow-origin", origin);
+					response.writeHead(200, {"Content-Type": "application/json"});
+					response.end(checksynce);	
+					
+				}					
+				else if (cleandata.session)
+				{
+					if(cleandata.session) {	
+			
 						function syncUIDcall(livedatabase, callback) {  
 							couchlive.getUIDfromcouch(callback);
 							
 						}  
 
-						syncUIDcall(livedatabase, function(responseuid) {  
+						syncUIDcall(livedatabase, function(responseuid) { 
+							
 							couchlive.syncsave(cleandata, responseuid, livedatabase);
+							
+							//notify by email new data has be replicated to their account
+												// neet to notify peer network that new data is availabe
+							peernoticelist = {};
+							//peernoticelist = cleandata.peernetwork;
+								// convert swimmer localid ie stopwatch id to an email address
+							var matchidtoemail = 'aboynejames@gmail.com';	
+							peernoticelist.email = matchidtoemail;//"james@aboynejames.co.uk";
+							emaillive.sendemail(peernoticelist);
+							
+							// this should be move to when couch has confirmed the save
 							syncresponse = {"save":"passed"};
 							checksync = JSON.stringify(syncresponse);
 							response.setHeader("access-control-allow-origin", origin);
@@ -423,28 +498,220 @@ console.log(' standard save to couchdb');
 							response.end(checksync);
 
 						});
-						
-					}  // closes else	
-				}
-				else
-				{
-					// 
-					syncresponse = {"sync":"passed"};
-					checksync = JSON.stringify(syncresponse);
-					response.setHeader("access-control-allow-origin", origin);
-					response.writeHead(200, {"Content-Type": "application/json"});
-					response.end(checksync);
+					}
 					
-				}
+				}  // closes else if	
+				else if (cleandata.commid)
+				{
+					if(cleandata.commid) {	
+				
+						function syncUIDcall(livedatabase, callback) {  
+							couchlive.getUIDfromcouch(callback);
+							
+						}  
+
+						syncUIDcall(livedatabase, function(responseuid) {  
+							couchlive.syncsave(cleandata, responseuid, livedatabase);
+							
+							
+							syncresponse = {"save":"setcommunication"};
+							checksync = JSON.stringify(syncresponse);
+							response.setHeader("access-control-allow-origin", origin);
+							response.writeHead(200, {"Content-Type": "application/json"});
+							response.end(checksync);
+
+						});
+						
+					}
+					
+				}  // closes else if					
+				else if (cleandata.idlocal)
+				{
+					if(cleandata.idlocal) {	
+			
+						function syncUIDcall(livedatabase, callback) {  
+							couchlive.getUIDfromcouch(callback);
+							
+						}  
+
+						syncUIDcall(livedatabase, function(responseuid) {  
+							couchlive.syncsave(cleandata, responseuid, livedatabase);
+							
+							syncresponse = {"save":"emailIDpassed"};
+							checksync = JSON.stringify(syncresponse);
+							response.setHeader("access-control-allow-origin", origin);
+							response.writeHead(200, {"Content-Type": "application/json"});
+							response.end(checksync);
+
+						});
+						
+						// save to centralized peermatch database 
+						function syncUIDcallpeer(livedatabase, callback) {  
+							couchlive.getUIDfromcouch(callback);
+							
+						}  
+
+						syncUIDcallpeer(livedatabase, function(responseuid) {  
+
+							couchlive.savepeermatch(cleandata, responseuid, livedatabase);					
+						
+						});							
+					}
+					
+				}  // closes else if				
+				else if (cleandata.idlocalnew)
+				{
+					if(cleandata.idlocalnew) {	
+
+
+						// neet to notify peer network that new data is available and grant temporary access for 24 hrs
+						peernoticelist = {};
+						//peernoticelist = cleandata.peernetwork;
+						peernoticelist.email = "james@aboynejames.co.uk";
+						
+						
+						function syncUIDcall(livedatabase, callback) {  
+							couchlive.getUIDfromcouch(callback);
+							
+						}  
+
+						syncUIDcall(livedatabase, function(responseuid) {  
+							couchlive.syncsave(cleandata, responseuid, livedatabase);
+							syncresponse = {"save":"emailIDpassed"};
+							checksync = JSON.stringify(syncresponse);
+							response.setHeader("access-control-allow-origin", origin);
+							response.writeHead(200, {"Content-Type": "application/json"});
+							response.end(checksync);
+
+						});
+					}
+					
+				}  // closes else if				
+
 			});
 		}
 	}	
+	else
+	{
+		// When dealing with CORS (Cross-Origin Resource Sharing)
+                // requests, the client should pass-through its origin (the
+                // requesting domain). We should either echo that or use *
+                // if the origin was not passed.
+                var origin = (request.headers.origin || "*");
+                // Check to see if this is a security check by the browser to
+                // test the availability of the API for the client. If the
+                // method is OPTIONS, the browser is check to see to see what
+                // HTTP methods (and properties) have been granted to the
+                // client.
+               if (request.method.toUpperCase() === "OPTIONS"){
+                        // Echo back the Origin (calling domain) so that the
+                        // client is granted access to make subsequent requests
+                        // to the API.
+                        response.writeHead(
+                                "401",
+                                "No Content",
+                                {
+                                        "access-control-allow-origin": origin,
+                                        //"access-control-allow-methods": "GET, POST, PUT, DELETE, OPTIONS",
+                                        "access-control-allow-headers": "content-type, accept",
+                                        "access-control-max-age": 10, // Seconds.
+                                        "content-length": 0
+                                }
+                        );
+                        // End the response - we're not sending back any content.
+                        return( response.end() );
+		       
+		       
+		// put return message to login to account or tell token in now out of date
+			//syncresponse = {"access":"fail"};
+			//checksync = JSON.stringify(syncresponse);
+			//response.setHeader("access-control-allow-origin", origin);
+			//response.writeHead(204, {"Content-Type": "application/json"});
+			//response.end(checksync);			       
+                }		
+		
+		
+	}
+};
+
+/**
+*  check if email id or data notification should be sent
+* @method checkdata
+*
+*/
+function checkdata(fullpath, response, request, couchin, couchlive, authom, emaillive) {
+
+	var checkpassin = '';
+	var livedatabase = '';
+
+	// check token and db are live if not tell user to re signing
+	var secpassed = livetokenaccount(fullpath[2], fullpath[4], couchin, response, request);
+
+	if(secpassed == "passedenter")
+	{
+		livedatabase = couchin.resthistory[fullpath[2]].database;
+		// set design doc for email status
+		couchlive.setdesignEmail(livedatabase);
+                // When dealing with CORS (Cross-Origin Resource Sharing)
+                // requests, the client should pass-through its origin (the
+                // requesting domain). We should either echo that or use *
+                // if the origin was not passed.
+                var origin = (request.headers.origin || "*");
+                // Check to see if this is a security check by the browser to
+                // test the availability of the API for the client. If the
+                // method is OPTIONS, the browser is check to see to see what
+                // HTTP methods (and properties) have been granted to the
+                // client.
+                if (request.method.toUpperCase() === "OPTIONS"){
+                        // Echo back the Origin (calling domain) so that the
+                        // client is granted access to make subsequent requests
+                        // to the API.
+                        response.writeHead(
+                                "204",
+                                "No Content",
+                                {
+                                        "access-control-allow-origin": origin,
+                                        "access-control-allow-methods": "GET, POST, PUT, DELETE, OPTIONS",
+                                        "access-control-allow-headers": "content-type, accept",
+                                        "access-control-max-age": 10, // Seconds.
+                                        "content-length": 0
+                                }
+                        );
+	
+                        // End the response - we're not sending back any content.
+                        return( response.end() );
+                }
+
+		if(request.method == 'POST'){
+			var syncdatain = '';
+			var cleandata = '';
+			request.on('data', function(chunk) {
+				syncdatain += chunk;
+			
+			});	
+		
+			request.on('end', function() {
+				cleandata =  JSON.parse(syncdatain);
+			
+				// next make a PUT call to couchdb API
+				// first need to see what type of save  data, id settings etc. and route appropriately
+				if(cleandata == "checkemail")
+				{	
+
+
+					// query couchdb for email/data status
+						couchlive.getEmailIDcouchdb(cleandata, fullpath,  response, origin, couchin,  couchlive, emaillive);	
+					
+				}					
+			});
+		}	
+	}		
 };
 
 exports.start = start;
-//exports.authomevent = authomevent;
 exports.logout = logout;
 exports.swimdata = swimdata;
 exports.racedata = racedata;
 exports.knowledgetemplate = knowledgetemplate;
 exports.swimdatasave = swimdatasave;
+exports.checkdata = checkdata;

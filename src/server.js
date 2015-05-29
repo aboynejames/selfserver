@@ -17,14 +17,16 @@ var util = require('util');
 var settings = require("./settings");
 var couchDB = require("./couchdb");
 var authom = require("authom");
-var serialport = require("serialport");	// include the serialport library
-var SerialPort = serialport.SerialPort;	// make a local instance of serial
+//var serialport = require("serialport");	// include the serialport library
+//var SerialPort = serialport.SerialPort;	// make a local instance of serial
 //var dgram = require('dgram');
 //var buf= require('buffer');
-var identititySelf = require("./identitysensortag");
+var EmailClient = require("./emailclient");
+//var identititySelf = require("./identitysensortag");
 var async = require('async');
 var SensorTag = require('./sensortagindex');
 var MasterStopwatch = require("./masterwatch");
+
 
 /**
 * controls start of node.js server
@@ -35,13 +37,14 @@ function start(route, handle) {
 
 	var couchin = {};
 	var couchlive = {};
+	var emaillive = {};		
 
 	couchin = new settings();
 	couchlive = new couchDB(couchin);
-	idsetup = new identititySelf();		
-	stopwatchlive = new MasterStopwatch(idsetup);	
-
-//console.log(stopwatchlive);
+	//idsetup = new identititySelf();		
+	//stopwatchlive = new MasterStopwatch(idsetup);
+	emaillive = new EmailClient();
+		
 	// serial port listener for touchpad mode  (will be WIFI)
 	// open the serial port. Change the name to the name of your port, just like in Processing and Arduino:
 	var serialData = {};	// object to hold what goes out to the client   ubuntu /dev/ttyACM0   pi    /dev/ttyAMA0		
@@ -50,16 +53,13 @@ function start(route, handle) {
 		parser: serialport.parsers.readline("\r\n")
 	});	
 */	
-
-
 	var app = http.createServer(onRequest).listen(8881);
 		
 	function onRequest(request, response) {
 	
 		var pathname = url.parse(request.url).pathname;
   
-//console.log("Request for " + pathname + " received.");
-		route(handle, pathname, response, request, couchin, couchlive, authom);
+		route(handle, pathname, response, request, couchin, couchlive, authom, emaillive);
 	}
 	
 	// data for live two way socket data flow for real time display everywhere
@@ -106,18 +106,16 @@ console.log('results ' + results);
 
 		socket.on('swimmerclientstart', function(stdata){
 			socket.emit('startnews', 'localpi');
-			setTimeout(function() {idsetup.checkIDs()},12000);
+			//setTimeout(function() {idsetup.checkIDs()},12000);
 
-			idsetup.on("IDdata", function(datainstant) {
-//console.log('Received starting ids: "' + datainstant + '"');
-				socket.emit('startSwimmers', datainstant);
-			});
+			//idsetup.on("IDdata", function(datainstant) {
+			//	socket.emit('startSwimmers', datainstant);
+			//});
 
 		});
 		
 		socket.on('checkSplitID', function(stdata){
-//console.log('identity split event socket');			
-			idsetup.checkSplitIDs();
+			//idsetup.checkSplitIDs();
 
 		});
 		
@@ -131,29 +129,27 @@ console.log('Timing event start: "' + JSON.stringify(timeEvent) + '"');
 			
 		});
 */		
-		idsetup.on("dataIDsplit", function(datainstant) {
+		//idsetup.on("dataIDsplit", function(datainstant) {
 //console.log('Received instant data: "' +  JSON.stringify(datainstant) + '"');			
 			//this.emit("startTimingevent", this.t);
 			// pass on to the communication mixer 
-			socket.emit('startEventout', JSON.stringify(datainstant));
+			//socket.emit('startEventout', JSON.stringify(datainstant));
 			
-		});
+		//});
 		
-		stopwatchlive.on("salveIDtime", function(Sdatainstant) {
+		//stopwatchlive.on("salveIDtime", function(Sdatainstant) {
 //console.log('slave ID and time back from other end of pool: "' +  JSON.stringify(Sdatainstant) + '"');			
 			//this.emit("startTimingevent", this.t);
 			// pass on to the communication mixer 
-			socket.emit('startEventout', JSON.stringify(Sdatainstant));
+			//socket.emit('startEventout', JSON.stringify(Sdatainstant));
 			
-		});
+		//});
 /*		
 		// serial usb port listener
 		myPort.on('data', function (data) {
 			// set the value property of scores to the serial string:
 			serialData.value = data;
 			// for debugging, you should see this in Terminal:
-console.log('masterpi radio log');			
-console.log(data);
 			// control master Server clock
 			//stopwatchlive.radiobutton(data);
 			stopwatchlive.returnIDslave(data);
@@ -162,23 +158,21 @@ console.log(data);
 		});  
 */		
 		socket.on('contextMixer', function(datacontext){
-//console.log(util.inspect(data));
-//console.log('context mixer in');								
-//console.log(datacontext);
+			
 			socket.broadcast.emit('contextEventdisplay', datacontext);	
 		});
 
 		
 	});
-/*
-// for offline by passing of third party login for TESTING
-			couchlive.checkPersonaldataStore(couchlive, "aboynejames" + "7766872");
+
+			// for offline by passing of third party login for TESTING
+			/*couchlive.checkPersonaldataStore(couchlive, "testselfengine" + "112233");
 
 			var setupIDdatabase = {};
-			setupIDdatabase.token = "7766872-4Hmh0YN2VuP6DTdlWUS3iLsHqx7TigypYTEolCADdM";
-			setupIDdatabase.database = "aboynejames" + "7766872";
-			couchin.resthistory['aboynejames'] = setupIDdatabase;
-*/
+			setupIDdatabase.token = "8881";
+			setupIDdatabase.database = "testselfengine" + "112233";
+			couchin.resthistory['testselfengine'] = setupIDdatabase;*/
+
 	
 	/*
 	* Authorisation sign in / identity storage setup
@@ -219,9 +213,16 @@ console.log(data);
 	  id: couchin.social['twitterid'],
 	  secret: couchin.social['twittersecret']
 	})
+
+	authom.createServer({		
+	  service: "twitter",
+	  name: "twitter4",		
+	  id: couchin.social['twitterid'],
+	  secret: couchin.social['twittersecret']
+	})
 	
 	authom.on("auth", function(request, response, datain) {
-//console.log(datain);
+
 		if(datain.service == "twitter")
 		{
 			// has a couchdb personal data store be setup for this identity? if not create one
@@ -272,10 +273,27 @@ console.log(data);
 			var returnurl = couchin.account.baseknowledge;
 			
 		}
+		else if(datain.service == "twitter4")
+		{
+			// has a couchdb personal data store be setup for this identity? if not create one
+			couchlive.checkPersonaldataStore(couchlive, datain.data.screen_name + datain.id);
+			
+			var idname = datain.data['screen_name'];
+			var idtoken = datain['token'];
+
+			//couchlive.aggregateID(datain.data.screen_name + datain.id);	
+			// keep trake of user id & token & expiry time (not added yet)
+			var setupIDdatabase = {};
+			setupIDdatabase.token = idtoken;
+			setupIDdatabase.database = datain.data.screen_name + datain.id;
+			couchin.resthistory[idname] = setupIDdatabase;
+			
+			var returnurl =  couchin.account.basesensor;
+			
+		}		
 
 		else if (datain.service == "facebook")
 		{
-console.log(datain);
 			var infbname = datain.data.name.replace(/\s+/g, '').toLowerCase(); ;//data['name'];
 			
 			couchlive.checkPersonaldataStore(couchlive, infbname + datain.id);
@@ -290,8 +308,7 @@ console.log(datain);
 						hash = ((hash<<5)-hash)+char;
 						hash = hash & hash; // Convert to 32bit integer
 					}
-console.log('hash');
-console.log(hash);					
+				
 					return hash;
 				};			
 			var idtoken = hashCode(datain.id) + 'k';
@@ -306,7 +323,6 @@ console.log(hash);
 		}
 		else if (datain.service == "facebook2")
 		{
-console.log(datain);
 			var infbname = datain.data.name.replace(/\s+/g, '').toLowerCase(); ;//data['name'];
 			
 			couchlive.checkPersonaldataStore(couchlive, infbname + datain.id);
@@ -321,10 +337,10 @@ console.log(datain);
 						hash = ((hash<<5)-hash)+char;
 						hash = hash & hash; // Convert to 32bit integer
 					}
-console.log('hash');
-console.log(hash);					
+				
 					return hash;
-				};			
+				};	
+				
 			var idtoken = hashCode(datain.id) + 'k';
 
 			var setupIDdatabase = {};
@@ -341,7 +357,6 @@ console.log(hash);
 		//res.writeHead(200, {'Content-Type': 'text/plain'});
 		//res.write(setsession);
 		var path = returnurl + idname + '&token=' + idtoken + '&fbn=' + datain.data.name;
-console.log(path);		
 		response.writeHead(302, {'Location': path});
 		response.end();
 	
@@ -361,7 +376,7 @@ console.log(path);
 		
 	authom.listen(app);
 		
-} // closes start function 
+}; // closes start function 
 
 
 exports.start = start;

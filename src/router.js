@@ -16,24 +16,21 @@ var util = require('util');
 /**
 * @method route
 */
-function route(handle, pathname, response, request, couchin, couchlive, authom) {
-console.log("About to route a request for " + pathname);
+function route(handle, pathname, response, request, couchin, couchlive, authom, emaillive) {
 
-//console.log(util.inspect(pathname));
-//console.log('at router leevvveel' + util.inspect(couchin));
 	var firstpath=pathname.split("/"); 
-//console.log(firstpath);
 	var pathlive = '/'+firstpath[1];
-//console.log(pathlive);
-  if (typeof handle[pathlive] === 'function') {
-    handle[pathlive](firstpath, response, request, couchin, couchlive, authom);
-  }
-  else {
-//console.log("No request handler found for " + pathname);
-    response.writeHead(404, {"Content-Type": "text/html"});
-    response.write("404 Not found");
-    response.end();
-  }
+
+	if (typeof handle[pathlive] === 'function') {
+		handle[pathlive](firstpath, response, request, couchin, couchlive, authom, emaillive);
+	}
+	else 
+	{
+		response.writeHead(404, {"Content-Type": "text/html"});
+		response.write("404 Not found");
+		response.end();
+	}
 }
+
 
 exports.route = route;

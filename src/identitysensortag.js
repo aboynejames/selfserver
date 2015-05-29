@@ -7,7 +7,7 @@ function identitySelf() {
 	this.nobleBT(0);
 	this.RSSholder = {};
 	this.excluded = ['9059af0b879c','9059af0b86e2','9059af0b8744','9059af0b869c'];	
-}
+};
 
 /**
 * inherits core emitter class within this class
@@ -20,8 +20,7 @@ util.inherits(identitySelf, events.EventEmitter);
 * @method write
 */
 identitySelf.prototype.checkIDs = function() {
-//console.log('building in event emitter into a class');
-//console.log(this.RSSholder);	
+
 	var liveIDs = Object.keys(this.RSSholder);
 	this.emit("IDdata", liveIDs);
 };
@@ -33,7 +32,7 @@ identitySelf.prototype.checkIDs = function() {
 */
 identitySelf.prototype.checkSplitIDs = function(typeEvent, timeEvent) {
 console.log('building in event emitter into a class');
-//console.log(this.RSSholder);	
+
 	var datainstant = this.RSSholder
 	var distanceOrder = [];
 	var btIDlive = Object.keys(datainstant);
@@ -45,7 +44,7 @@ console.log('building in event emitter into a class');
 	var tidylist = [];
 	//this.excluded  to FINISH
 	distanceOrder.forEach(function(idlist) {
-//console.log(idsetup.excluded);	
+	
 		if(idlist[0] == idsetup.excluded[0] || idlist[0] == idsetup.excluded[1] || idlist[0] == idsetup.excluded[2] )
 		{
 		}
@@ -58,9 +57,6 @@ console.log('building in event emitter into a class');
 		
 	tidylist.sort(function(a, b) {return a[1] - b[1]})
 	// order the arrays distance lowest to highest
-console.log('closest');
-console.log(tidylist);	
-console.log(tidylist.slice(-1)[0]);
 	var extractID = tidylist.slice(-1)[0];
 	var timeandidentity = {};
 	timeandidentity[extractID[0]] = [typeEvent,timeEvent];	
@@ -74,9 +70,9 @@ console.log(tidylist.slice(-1)[0]);
 * @method write
 */
 identitySelf.prototype.setID = function(timein, IDdatain) {
-//console.log('holding all the data');	
+	
 	this.RSSholder  = IDdatain; 
-//console.log(this.RSSholder);	
+	
 };
 
 /**
@@ -84,9 +80,9 @@ identitySelf.prototype.setID = function(timein, IDdatain) {
 * @method write
 */
 identitySelf.prototype.resetIDdata = function() {
-//console.log('reset the holder ');	
+
 	this.RSSholder  = {}; 
-//console.log(this.RSSholder);	
+
 };
 
 
@@ -96,7 +92,6 @@ identitySelf.prototype.resetIDdata = function() {
 */
 identitySelf.prototype.nobleBT = function() {
 
-	//console.log(noble);
 	noble.on('stateChange', function(state) {
 	  if (state === 'poweredOn') {
 	    noble.startScanning();
@@ -115,21 +110,16 @@ identitySelf.prototype.nobleBT = function() {
 		setInterval(function(){  //myTimer()
 
 			var sensordate = new Date();
-//console.log(sensordate);		
-//console.log('signal strenght = distance');	
-//console.log(peripheral.rssi);
-//console.log('peripheral discovered (' + peripheral.uuid+ '):' + peripheral.advertisement.localName);	
+
 			daterssiholder.push(sensordate.getTime());
 			daterssiholder.push(peripheral.rssi);		
 			
 			logRSSI[peripheral.uuid] = daterssiholder;
-//console.log(logRSSI);
+
 			idsetup.setID(sensordate.getTime(), logRSSI);
 
 			daterssiholder = [];
-			//logRSSI = {};
-//console.log(sensordate.getTime());			
-//console.log(RSSholder[sensordate.getTime()]);		
+	
 
 		},250);
 		
