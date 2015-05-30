@@ -61,7 +61,6 @@ coudchdbSettings.prototype.createnewcouchdb = function (couchlive, newnamecouch,
 		});
 	
 		res.on('end', function() {
-			
 			// first secure the personal data store on couchdb
 			couchlive.secureCouchdatastore(newnamecouch);
 			var  backdejson = JSON.parse(resultback);
@@ -271,7 +270,7 @@ coudchdbSettings.prototype.setdesignEmail = function(accountID) {
 	var designdata4 = {};
 	designdata4.language = "javascript";
 	var viewdesign4 = {};
-	viewdesign4.by_emailstatus = {"map" : "function(doc) {\n\tif(doc.idlocal)\n\t{\n  \t\temit(doc.idlocal, [doc.email,doc.emailstatus]);\n\t}\n}"};
+	viewdesign4.by_emailstatus = {"map" : "function(doc) {if (doc.idlocal){emit(doc.idlocal, [doc.email,doc.emailstatus, doc.username]);}}"};
 	designdata4.views = viewdesign4;
 	
 	this.syncsave(designdata4, firstdesigndoc4, accountID);	
@@ -1082,7 +1081,7 @@ coudchdbSettings.prototype.buildKnowledgeTemplate = function(fullpath, response,
 coudchdbSettings.prototype.getEmailIDcouchdb  = function(singleid, fullpath, response, origin, couchin, couchlive, emaillive) {
 //console.log('list of email status');		
 	buildpathurl = '/' + couchin.resthistory[fullpath[2]].database + '/_design/emailstatus/_view/by_emailstatus';	
-//console.log(buildpathurl);	
+
 	var opts = {
 		host: 'localhost',
 		port: 5984,
@@ -1100,12 +1099,9 @@ coudchdbSettings.prototype.getEmailIDcouchdb  = function(singleid, fullpath, res
 		
 		resw.on('end', function() {						
 			resultemailid = JSON.parse(swlivenew);
-//console.log('query back from email status');
-//console.log(resultemailid.rows);			
-			//callbackin(resultjs['rows']);
 			// need to illerate through and send out an email
 			resultemailid.rows.forEach(function(stwemailid){
-//console.log(stwemailid);		
+console.log(stwemailid);		
 				var testwelcome = {};
 				testwelcome['idlocalnew'] = stwemailid.value[2];
 				testwelcome['email'] = stwemailid.value[0];
@@ -1186,8 +1182,7 @@ coudchdbSettings.prototype.dataFilteredreplicate = function (dataID, dbtargetID,
 	// filtered replication call				
 	var postData = JSON.stringify({
 	//"_id":"by_data",	
-	"source": databasesource,//"aboynejames7766872",
-//	"target":"?????:?????@127.0.0.1:5984/" + dbtargetID,// add master couchdb authorisation details",
+	"source": databasesource,
 	"target":buildtarget,	
 	"create_target": true,
 	"continuous": true,
