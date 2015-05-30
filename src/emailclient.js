@@ -1,7 +1,9 @@
 var nodemailer = require("nodemailer");
 
-function EmailClient() {
-
+function EmailClient(settingsin) {
+	
+	this.smtpaccount =  settingsin.account['smtpemail'];
+	this.smtppwd = settingsin.account['smtppassword'];
 
 };
 
@@ -15,8 +17,8 @@ EmailClient.prototype.sendWelcomemail = function(inPeer) {
 	var smtpTransport = nodemailer.createTransport("SMTP",{
 	   service: "Gmail",
 	   auth: {
-	       user: "",
-	       pass: ""
+	       user: this.smtpaccount,
+	       pass: this.smtppwd
 	   }
 	});
 
@@ -52,8 +54,8 @@ EmailClient.prototype.sendemail = function(inPeer) {
 	var smtpTransport = nodemailer.createTransport("SMTP",{
 	   service: "Gmail",
 	   auth: {
-	       user: "",
-	       pass: ""
+	       user: this.smtpaccount,
+	       pass: this.smtppwd
 	   }
 	});
 

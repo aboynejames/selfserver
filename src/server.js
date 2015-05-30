@@ -35,15 +35,15 @@ var MasterStopwatch = require("./masterwatch");
 */
 function start(route, handle) {
 
-	var couchin = {};
+	var settingsin = {};
 	var couchlive = {};
 	var emaillive = {};		
 
-	couchin = new settings();
-	couchlive = new couchDB(couchin);
+	settingsin = new settings();
+	couchlive = new couchDB(settingsin);
 	//idsetup = new identititySelf();		
 	//stopwatchlive = new MasterStopwatch(idsetup);
-	emaillive = new EmailClient();
+	emaillive = new EmailClient(settingsin);
 		
 	// serial port listener for touchpad mode  (will be WIFI)
 	// open the serial port. Change the name to the name of your port, just like in Processing and Arduino:
@@ -59,7 +59,7 @@ function start(route, handle) {
 	
 		var pathname = url.parse(request.url).pathname;
   
-		route(handle, pathname, response, request, couchin, couchlive, authom, emaillive);
+		route(handle, pathname, response, request, settingsin, couchlive, authom, emaillive);
 	}
 	
 	// data for live two way socket data flow for real time display everywhere
@@ -171,7 +171,7 @@ console.log('Timing event start: "' + JSON.stringify(timeEvent) + '"');
 			var setupIDdatabase = {};
 			setupIDdatabase.token = "8881";
 			setupIDdatabase.database = "testselfengine" + "112233";
-			couchin.resthistory['testselfengine'] = setupIDdatabase;*/
+			settingsin.resthistory['testselfengine'] = setupIDdatabase;*/
 
 	
 	/*
@@ -180,45 +180,45 @@ console.log('Timing event start: "' + JSON.stringify(timeEvent) + '"');
 	*/
 	authom.createServer({
 		service: "facebook",
-		id: couchin.social['facebookid'],
-		secret: couchin.social['facebooksecret'],
+		id: settingsin.social['facebookid'],
+		secret: settingsin.social['facebooksecret'],
 		fields: ['name', 'picture']
 	})
 
 	authom.createServer({
 		service: "facebook",
 		name: "facebook2",
-		id: couchin.social['facebookid'],
-		secret: couchin.social['facebooksecret'],
+		id: settingsin.social['facebookid'],
+		secret: settingsin.social['facebooksecret'],
 		fields: ['name', 'picture']
 	})
 	
 	authom.createServer({		
 	  service: "twitter",
 	  name: "twitter",
-	  id: couchin.social['twitterid'],
-	  secret: couchin.social['twittersecret']
+	  id: settingsin.social['twitterid'],
+	  secret: settingsin.social['twittersecret']
 	})
 
 	authom.createServer({		
 	  service: "twitter",
 	  name: "twitter2",		
-	  id: couchin.social['twitterid'],
-	  secret: couchin.social['twittersecret']
+	  id: settingsin.social['twitterid'],
+	  secret: settingsin.social['twittersecret']
 	})
 	
 	authom.createServer({		
 	  service: "twitter",
 	  name: "twitter3",		
-	  id: couchin.social['twitterid'],
-	  secret: couchin.social['twittersecret']
+	  id: settingsin.social['twitterid'],
+	  secret: settingsin.social['twittersecret']
 	})
 
 	authom.createServer({		
 	  service: "twitter",
 	  name: "twitter4",		
-	  id: couchin.social['twitterid'],
-	  secret: couchin.social['twittersecret']
+	  id: settingsin.social['twitterid'],
+	  secret: settingsin.social['twittersecret']
 	})
 	
 	authom.on("auth", function(request, response, datain) {
@@ -236,9 +236,9 @@ console.log('Timing event start: "' + JSON.stringify(timeEvent) + '"');
 			var setupIDdatabase = {};
 			setupIDdatabase.token = idtoken;
 			setupIDdatabase.database = datain.data.screen_name + datain.id;
-			couchin.resthistory[idname] = setupIDdatabase;
+			settingsin.resthistory[idname] = setupIDdatabase;
 			
-			var returnurl =  couchin.account.baseurl;
+			var returnurl =  settingsin.account.baseurl;
 			
 		}
 		else if(datain.service == "twitter2")
@@ -252,9 +252,9 @@ console.log('Timing event start: "' + JSON.stringify(timeEvent) + '"');
 			var setupIDdatabase = {};
 			setupIDdatabase.token = idtoken;
 			setupIDdatabase.database = datain.data.screen_name + datain.id;
-			couchin.resthistory[idname] = setupIDdatabase;
+			settingsin.resthistory[idname] = setupIDdatabase;
 
-			var returnurl =  couchin.account.basestopwatch;
+			var returnurl =  settingsin.account.basestopwatch;
 			
 		}
 		else if(datain.service == "twitter3")
@@ -268,9 +268,9 @@ console.log('Timing event start: "' + JSON.stringify(timeEvent) + '"');
 			var setupIDdatabase = {};
 			setupIDdatabase.token = idtoken;
 			setupIDdatabase.database = 'swimknowledge';//screen_name + datain.id;
-			couchin.resthistory[idname] = setupIDdatabase;
+			settingsin.resthistory[idname] = setupIDdatabase;
 
-			var returnurl = couchin.account.baseknowledge;
+			var returnurl = settingsin.account.baseknowledge;
 			
 		}
 		else if(datain.service == "twitter4")
@@ -286,9 +286,9 @@ console.log('Timing event start: "' + JSON.stringify(timeEvent) + '"');
 			var setupIDdatabase = {};
 			setupIDdatabase.token = idtoken;
 			setupIDdatabase.database = datain.data.screen_name + datain.id;
-			couchin.resthistory[idname] = setupIDdatabase;
+			settingsin.resthistory[idname] = setupIDdatabase;
 			
-			var returnurl =  couchin.account.basesensor;
+			var returnurl =  settingsin.account.basesensor;
 			
 		}		
 
@@ -316,9 +316,9 @@ console.log('Timing event start: "' + JSON.stringify(timeEvent) + '"');
 			var setupIDdatabase = {};
 			setupIDdatabase.token = idtoken;
 			setupIDdatabase.database = infbname + datain.id;//screen_name + datain.id;
-			couchin.resthistory[idname] = setupIDdatabase;
+			settingsin.resthistory[idname] = setupIDdatabase;
 
-			var returnurl =  couchin.account.baseurl;
+			var returnurl =  settingsin.account.baseurl;
 						
 		}
 		else if (datain.service == "facebook2")
@@ -346,9 +346,9 @@ console.log('Timing event start: "' + JSON.stringify(timeEvent) + '"');
 			var setupIDdatabase = {};
 			setupIDdatabase.token = idtoken;
 			setupIDdatabase.database = infbname + datain.id;//screen_name + datain.id;
-			couchin.resthistory[idname] = setupIDdatabase;
+			settingsin.resthistory[idname] = setupIDdatabase;
 
-			var returnurl = couchin.account.basestopwatch;
+			var returnurl = settingsin.account.basestopwatch;
 						
 		}
 		
