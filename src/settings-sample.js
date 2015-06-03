@@ -35,7 +35,7 @@ var settings = function() {
 		
 	this.resthistory = {};
 	this.sensorid = {};
-	
+	this.group = {};
 		
 };
 

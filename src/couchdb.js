@@ -1101,7 +1101,7 @@ coudchdbSettings.prototype.getEmailIDcouchdb  = function(singleid, fullpath, res
 			resultemailid = JSON.parse(swlivenew);
 			// need to illerate through and send out an email
 			resultemailid.rows.forEach(function(stwemailid){
-console.log(stwemailid);		
+//console.log(stwemailid);		
 				var testwelcome = {};
 				testwelcome['idlocalnew'] = stwemailid.value[2];
 				testwelcome['email'] = stwemailid.value[0];
@@ -1130,7 +1130,7 @@ console.log(stwemailid);
 * @method syncsave
 */
 coudchdbSettings.prototype.syncsave = function (datatosaveswim, UUIDin, databaseid) {
-console.log('start of couch save');	
+//console.log('start of couch save');	
 	// need to call the couchdb function / class  pass on data and PUT				
 	var opts = {
 	host: 'localhost',

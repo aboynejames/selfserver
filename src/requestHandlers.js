@@ -697,10 +697,8 @@ function checkdata(fullpath, response, request, couchin, couchlive, authom, emai
 				// first need to see what type of save  data, id settings etc. and route appropriately
 				if(cleandata == "checkemail")
 				{	
-
-
 					// query couchdb for email/data status
-						couchlive.getEmailIDcouchdb(cleandata, fullpath,  response, origin, couchin,  couchlive, emaillive);	
+					couchlive.getEmailIDcouchdb(cleandata, fullpath,  response, origin, couchin,  couchlive, emaillive);	
 					
 				}					
 			});
