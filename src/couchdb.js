@@ -270,7 +270,7 @@ coudchdbSettings.prototype.setdesignEmail = function(accountID) {
 	var designdata4 = {};
 	designdata4.language = "javascript";
 	var viewdesign4 = {};
-	viewdesign4.by_emailstatus = {"map" : "function(doc) {if (doc.idlocal){emit(doc.idlocal, [doc.email,doc.emailstatus, doc.username]);}}"};
+	viewdesign4.by_emailstatus = {"map" : "function(doc) {if (doc.idlocal){emit(doc.idlocal, [doc.email,doc.emailstatus, doc.username,doc.idpouch,doc._rev]);}}"};
 	designdata4.views = viewdesign4;
 	
 	this.syncsave(designdata4, firstdesigndoc4, accountID);	
@@ -1079,7 +1079,7 @@ coudchdbSettings.prototype.buildKnowledgeTemplate = function(fullpath, response,
 *
 */
 coudchdbSettings.prototype.getEmailIDcouchdb  = function(singleid, fullpath, response, origin, couchin, couchlive, emaillive) {
-//console.log('list of email status');		
+console.log('list of email status');		
 	buildpathurl = '/' + couchin.resthistory[fullpath[2]].database + '/_design/emailstatus/_view/by_emailstatus';	
 
 	var opts = {
@@ -1101,16 +1101,34 @@ coudchdbSettings.prototype.getEmailIDcouchdb  = function(singleid, fullpath, res
 			resultemailid = JSON.parse(swlivenew);
 			// need to illerate through and send out an email
 			resultemailid.rows.forEach(function(stwemailid){
-//console.log(stwemailid);		
-				var testwelcome = {};
-				testwelcome['idlocalnew'] = stwemailid.value[2];
-				testwelcome['email'] = stwemailid.value[0];
-				testwelcome['idstopwatch'] = stwemailid.key;	
-				testwelcome['dbname'] = couchin.resthistory[fullpath[2]].database;		
-				emaillive.sendWelcomemail(testwelcome);
-				// set sync for this pairing   stopwatch recorder to swimmerid
-				// save centralized linking stopwatch ID to  source location of couchDB name
+console.log(stwemailid);		
+				if(stwemailid.value[1] == 0)
+				{
+console.log('email status is 0');
+					// send welcome email
+					var testwelcome = {};
+					testwelcome.idlocalnew = stwemailid.value[2];
+					testwelcome.email = stwemailid.value[0];
+					testwelcome.idstopwatch = stwemailid.key;	
+					testwelcome.dbname = couchin.resthistory[fullpath[2]].database;		
+					emaillive.sendWelcomemail(testwelcome);
+					// update couchdb inform this email address has been sent
+					var updateIDdoc = {};
+					updateIDdoc.emailstatus = 1;
+					updateIDdoc.username = stwemailid.value[2];
+					updateIDdoc.idlocal = stwemailid.key;
+					updateIDdoc.email = stwemailid.value[0];
+					updateIDdoc.idpouch = stwemailid.value[3];	
+					//updateIDdoc.startdate = stwemailid.value[2];
+					updateIDdoc._rev = stwemailid.value[4];
+					couchlive.syncsave(updateIDdoc, stwemailid.id, couchin.resthistory[fullpath[2]].database);	
 					
+				}
+				else
+				{
+console.log('email has already been sent');					
+					// an email already sent.
+				}
 	
 			});
 			//  send response back that emails have been sent out.
@@ -1130,7 +1148,7 @@ coudchdbSettings.prototype.getEmailIDcouchdb  = function(singleid, fullpath, res
 * @method syncsave
 */
 coudchdbSettings.prototype.syncsave = function (datatosaveswim, UUIDin, databaseid) {
-//console.log('start of couch save');	
+console.log('start of couch save');	
 	// need to call the couchdb function / class  pass on data and PUT				
 	var opts = {
 	host: 'localhost',
@@ -1145,7 +1163,7 @@ coudchdbSettings.prototype.syncsave = function (datatosaveswim, UUIDin, database
 	opts.headers['Content-Type'] = 'application/json';
 
 	data = JSON.stringify(datatosaveswim);
-//console.log(data);
+console.log(data);
 	opts.headers['Content-Length'] = data.length;
 	rec_data = '';
 		
@@ -1155,13 +1173,13 @@ coudchdbSettings.prototype.syncsave = function (datatosaveswim, UUIDin, database
 		});
 						
 		responsec.on('end', function() {
-//console.log('save response');			
-//console.log(rec_data);
+console.log('save response');			
+console.log(rec_data);
 		});
 	});
 				
 	reqc.on('error', function(e) {
-//console.log("Got save error: " + e.message);
+console.log("Got save error: " + e.message);
 	});
 	// write the data
 	if (opts.method == 'PUT') {

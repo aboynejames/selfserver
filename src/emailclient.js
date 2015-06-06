@@ -27,8 +27,8 @@ EmailClient.prototype.sendWelcomemail = function(inPeer) {
 	    from: 'Stopwatch<welcome@mepath.co.uk>', // sender address
 	    to: inPeer.email, // list of receivers
 	    subject: 'Stopwatch data identity', // Subject line
-	    text: 'Welcome, ' +  inPeer.idlocalnew + '.  Stopwatch data has been recorded for you by a timer.  Your Stopwatch ID is = ' + inPeer.idstopwatch + ' . This information can be added to www.mepath.co.uk to view your stopwatch times and a range of analysis.', // plaintext body
-	    html: '<b>Welcome, ' +  inPeer.idlocalnew + '.  Stopwatch data has been recorded for you by a timer.  Your Stopwatch ID is = ' + inPeer.idstopwatch + ' . This information can be added to www.mepath.co.uk to view your stopwatch times and a range of analysis</b>'  // html bodyttidtraintimer
+	    text: 'Welcome, ' +  inPeer.idlocalnew + '.  Stopwatch data has been recorded for you by a http://www.smartstopwatch.org timer.  Your Stopwatch ID is = ' + inPeer.idstopwatch + ' . This information can be added to www.mepath.co.uk to view your stopwatch times and a range of analysis.', // plaintext body
+	    html: '<b>Welcome, ' +  inPeer.idlocalnew + '.  Stopwatch data has been recorded for you by a <a href="http://www.smartstopwatch.org">www.smartstopwatch.org</a> timer.  Your Stopwatch ID is = ' + inPeer.idstopwatch + ' . This ID number can be added to www.mepath.co.uk to view your stopwatch times and a range of analysis</b>' 
 	};
 
 	// send mail with defined transport object
@@ -67,7 +67,7 @@ EmailClient.prototype.sendemail = function(inPeer) {
 	    to: inPeer.email, // list of receivers
 	    subject: 'New data', // Subject line
 	    text: 'New data has been synced for your account.', // plaintext body
-	    html: '<b>New data has been synced for your account.' // html body
+	    html: '<b>New data has been synced for your account.</b>' // html body
 	};
 
 	// send mail with defined transport object
