@@ -1079,7 +1079,7 @@ coudchdbSettings.prototype.buildKnowledgeTemplate = function(fullpath, response,
 *
 */
 coudchdbSettings.prototype.getEmailIDcouchdb  = function(singleid, fullpath, response, origin, couchin, couchlive, emaillive) {
-console.log('list of email status');		
+		
 	buildpathurl = '/' + couchin.resthistory[fullpath[2]].database + '/_design/emailstatus/_view/by_emailstatus';	
 
 	var opts = {
@@ -1101,10 +1101,9 @@ console.log('list of email status');
 			resultemailid = JSON.parse(swlivenew);
 			// need to illerate through and send out an email
 			resultemailid.rows.forEach(function(stwemailid){
-console.log(stwemailid);		
+	
 				if(stwemailid.value[1] == 0)
 				{
-console.log('email status is 0');
 					// send welcome email
 					var testwelcome = {};
 					testwelcome.idlocalnew = stwemailid.value[2];
@@ -1126,7 +1125,6 @@ console.log('email status is 0');
 				}
 				else
 				{
-console.log('email has already been sent');					
 					// an email already sent.
 				}
 	
@@ -1163,7 +1161,7 @@ console.log('start of couch save');
 	opts.headers['Content-Type'] = 'application/json';
 
 	data = JSON.stringify(datatosaveswim);
-console.log(data);
+//console.log(data);
 	opts.headers['Content-Length'] = data.length;
 	rec_data = '';
 		
@@ -1173,13 +1171,13 @@ console.log(data);
 		});
 						
 		responsec.on('end', function() {
-console.log('save response');			
-console.log(rec_data);
+//console.log('save response');			
+//console.log(rec_data);
 		});
 	});
 				
 	reqc.on('error', function(e) {
-console.log("Got save error: " + e.message);
+//console.log("Got save error: " + e.message);
 	});
 	// write the data
 	if (opts.method == 'PUT') {
